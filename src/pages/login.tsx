@@ -1,10 +1,12 @@
 import * as React from "react";
+import {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {Button, FormGroup, FormLabel, Grid, TextField} from "@mui/material";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import {loginAction} from "../features/auth/actions";
-import {useAppDispatch} from "../hooks";
+import {useAppDispatch, useAppSelector} from "../hooks";
+import {useSnackbar} from "notistack";
 
 
 const validationSchema = Yup.object().shape({
@@ -27,11 +29,30 @@ export default function LoginForm() {
         resolver: yupResolver(validationSchema)
     });
     const dispatch = useAppDispatch();
+    const {enqueueSnackbar} = useSnackbar();
 
     const onSubmit = (data: any) => {
         dispatch(loginAction({username: data.username, password: data.password}));
-
     }
+    const auth = useAppSelector(state => state.auth);
+
+    useEffect(() => {
+        if (auth.error) {
+            enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
+        }
+    }, [auth.error]);
+
+    useEffect(() => {
+        if (auth.isAuth) {
+            enqueueSnackbar("Login successful", {variant: "success"});
+        }
+    }, [auth.isAuth]);
+
+    useEffect(() => {
+        if (auth.isAuthenticating) {
+            enqueueSnackbar("Authenticating ...", {variant: "info"});
+        }
+    }, [auth.isAuthenticating]);
 
     React.useEffect(() => {
         register("username", {required: true});

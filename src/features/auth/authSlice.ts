@@ -7,7 +7,8 @@ interface Auth {
     username: string;
     expires: string;
     isAuth: boolean;
-    isLoading: boolean;
+    isAuthenticating: boolean;
+    isRefreshing: boolean;
     error?: string|null;
 }
 
@@ -17,7 +18,8 @@ const initialState: Auth = {
     username: "",
     expires: "",
     isAuth: false,
-    isLoading: false,
+    isAuthenticating: false,
+    isRefreshing: false,
 }
 
 
@@ -40,7 +42,7 @@ export const authSlice = createSlice({
         })
         builder.addCase(loginAction.pending, (state) => {
             state.isAuth = false;
-            state.isLoading = true;
+            state.isAuthenticating = true;
         })
 
         builder.addCase(logoutAction.fulfilled, (state) => {
@@ -64,13 +66,14 @@ export const authSlice = createSlice({
             state.isAuth = true;
         });
         builder.addCase(refreshTokenAction.rejected, (state, action) => {
-            // send error message to messageSlice
-            addMessage({text: action.error.message || "Unknown error", type: "error"});
+            state.isAuth = false;
+            state.error = action.error.message;
+            state.isRefreshing = false;
         });
 
         builder.addCase(refreshTokenAction.pending, (state) => {
             state.isAuth = false;
-            state.isLoading = true;
+            state.isRefreshing = true;
         });
 
 
