@@ -1,12 +1,14 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useForm} from "react-hook-form";
-import {Button, FormGroup, FormLabel, Grid, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import {loginAction} from "../features/auth/actions";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {useSnackbar} from "notistack";
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import {Form} from "react-router-dom";
 
 
 const validationSchema = Yup.object().shape({
@@ -30,37 +32,49 @@ export default function LoginForm() {
     });
     const dispatch = useAppDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const auth = useAppSelector(state => state.auth);
 
     const onSubmit = (data: any) => {
-        dispatch(loginAction({username: data.username, password: data.password}));
+        if (!auth.isAuthenticating) {
+            dispatch(loginAction({username: data.username, password: data.password}))
+        }
+
+
     }
-    const auth = useAppSelector(state => state.auth);
 
     useEffect(() => {
         if (auth.error) {
             enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
             closeSnackbar('authenticating');
         }
-    }, [auth.error]);
 
-    useEffect(() => {
+
         if (auth.isAuth) {
             enqueueSnackbar("Login successful", {variant: "success"});
             closeSnackbar('authenticating');
         }
-    }, [auth.isAuth]);
 
-    useEffect(() => {
+
         if (auth.isAuthenticating) {
             // enqueue animated snackbar
-            enqueueSnackbar("Authenticating...", {
-                variant: "info",
-                persist: true,
-                key: 'authenticating',
-            });
+            enqueueSnackbar(
+                <Grid container justifyContent="center" alignItems="center">
+                    <Grid item xs={11}>
+                        Authenticating
+                    </Grid>
+                    <Grid item xs={1}>
+                        <HourglassBottomIcon className={"rotate"}/>
+                    </Grid>
+                </Grid>,
+
+                {
+                    variant: "info",
+                    persist: true,
+                    key: 'authenticating',
+                });
 
         }
-    }, [auth.isAuthenticating]);
+    }, [auth.error, auth.isAuth, auth.isAuthenticating]);
 
     React.useEffect(() => {
         register("username", {required: true});
@@ -82,50 +96,54 @@ export default function LoginForm() {
 
     return (
 
-        <Grid item sx={{
-            width: "100%",
-            height: "70vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+        <Grid container spacing={3}
+              direction={"column"}
+        >
+            <Grid item><h1>Login</h1></Grid>
+            <Grid item>
 
-        }}>
-            <h1>Login</h1>
-            <form>
-                <FormGroup>
-                    <Grid container
-                          direction="column"
-                          justifyContent="center"
-                          alignItems="center"
-                          spacing={4}>
-                        <Grid item>
-                            <FormLabel>Username</FormLabel>
-                            <TextField fullWidth
-                                       {...register("username", {
-                                           required: true,
-                                       })}
-                                       error={!!errors.username}
-                                       autoComplete="username"
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Grid container spacing={3}>
+
+                        <Grid item xs={12}>
+                            <TextField
+                                {...register("username")}
+                                error={!!errors.username}
+                                helperText={errors?.username?.message}
+                                label="Username"
+                                fullWidth
+                                autoComplete="username"
                             />
                         </Grid>
-                        <Grid item>
-                            <FormLabel>Password</FormLabel>
-                            <TextField fullWidth
-                                       {...register("password", {
-                                           required: true,
-                                       })}
-                                       type="password"
-                                       autoComplete="password"
-                                       error={!!errors.password}
+                        <Grid item xs={12}>
+                            <TextField
+                                {...register("password")}
+                                error={!!errors.password}
+                                helperText={errors?.password?.message}
+                                label="Password"
+                                fullWidth
+                                type="password"
+                                autoComplete="new-password"
                             />
-
                         </Grid>
+
                     </Grid>
-                    <Button id="button" variant="contained" color="primary" sx={{marginTop: 2}}
-                            onClick={handleSubmit(onSubmit)}>Submit</Button>
-                </FormGroup>
-            </form>
+
+
+                </Form>
+
+            </Grid>
+            <Grid item>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit(onSubmit)}
+                >
+                    Login
+                </Button>
+            </Grid>
         </Grid>
 
 

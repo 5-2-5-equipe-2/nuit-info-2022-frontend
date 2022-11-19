@@ -1,7 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit'
+import {configureStore} from '@reduxjs/toolkit'
 import {counterSlice} from "./features/counter/counterSlice";
 import {authSlice} from "./features/auth/authSlice";
 import {messageSlice} from "./features/messages/messageSlice";
+
 const store = configureStore({
     reducer: {
         counter: counterSlice.reducer,

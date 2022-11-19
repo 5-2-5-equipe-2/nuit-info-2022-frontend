@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {addMessage} from "../messages/messageSlice";
 import {loginAction, logoutAction, refreshTokenAction} from "./actions";
+
 interface Auth {
     accessToken: string;
     refreshToken: string;
@@ -9,7 +9,7 @@ interface Auth {
     isAuth: boolean;
     isAuthenticating: boolean;
     isRefreshing: boolean;
-    error?: string|null;
+    error?: string | null;
 }
 
 const initialState: Auth = {
@@ -35,14 +35,30 @@ export const authSlice = createSlice({
             state.username = action.payload.username;
             state.expires = new Date(action.payload.expires).toISOString();
             state.isAuth = true;
+            state.isAuthenticating = false;
+            state.error = null;
         })
         builder.addCase(loginAction.rejected, (state, action) => {
             state.isAuth = false;
             state.error = action.error.message;
+            state.isAuthenticating = false;
+            state.isRefreshing = false;
+            state.accessToken = "";
+            state.refreshToken = "";
+            state.username = "";
+            state.expires = "";
+
         })
         builder.addCase(loginAction.pending, (state) => {
             state.isAuth = false;
             state.isAuthenticating = true;
+            state.isRefreshing = false;
+            state.error = null;
+            state.accessToken = "";
+            state.refreshToken = "";
+            state.username = "";
+            state.expires = "";
+
         })
 
         builder.addCase(logoutAction.fulfilled, (state) => {
@@ -51,12 +67,22 @@ export const authSlice = createSlice({
                 state.username = "";
                 state.expires = "";
                 state.isAuth = false;
+                state.isAuthenticating = false;
+                state.isRefreshing = false;
+                state.error = null;
             }
         )
         builder.addCase(logoutAction.rejected, (state, action) => {
-            // send error message to messageSlice
-            addMessage({text: action.error.message || "Unknown error", type: "error"});
-        });
+            state.isAuth = false;
+            state.error = action.error.message;
+            state.isAuthenticating = false;
+            state.isRefreshing = false;
+            state.accessToken = "";
+            state.refreshToken = "";
+            state.username = "";
+            state.expires = "";
+
+        })
 
         builder.addCase(refreshTokenAction.fulfilled, (state, action) => {
             state.accessToken = action.payload.accessToken;
@@ -64,16 +90,23 @@ export const authSlice = createSlice({
             state.username = action.payload.username;
             state.expires = action.payload.expires.toISOString();
             state.isAuth = true;
+            state.isAuthenticating = false;
+            state.isRefreshing = false;
+            state.error = null;
         });
         builder.addCase(refreshTokenAction.rejected, (state, action) => {
             state.isAuth = false;
             state.error = action.error.message;
             state.isRefreshing = false;
+            state.isAuthenticating = false;
+
         });
 
         builder.addCase(refreshTokenAction.pending, (state) => {
             state.isAuth = false;
             state.isRefreshing = true;
+            state.isAuthenticating = false;
+
         });
 
 

@@ -6,7 +6,7 @@ export const loginAction = createAsyncThunk("auth/login", async (payload: LoginP
     return response.data;
 });
 
-export const registerAction= createAsyncThunk("auth/register", async (payload: RegisterPayload) => {
+export const registerAction = createAsyncThunk("auth/register", async (payload: RegisterPayload) => {
         const response = await Service.register(payload);
         return response.data;
     }
