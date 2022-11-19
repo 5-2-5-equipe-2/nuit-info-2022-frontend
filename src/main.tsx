@@ -10,6 +10,7 @@ import store from "./store";
 import {SnackbarProvider} from "notistack";
 import LoginForm from "./pages/login";
 import {createTheme, ThemeProvider} from "@mui/material";
+import RegisterForm from "./pages/register";
 
 const queryClient = new QueryClient()
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
 
                                 <Route path="/login" element={<LoginForm/>}/>
                                 <Route path="/app" element={<App/>}/>
+                                <Route path="/register" element={<RegisterForm/>}/>
                             </Routes>
                         </ThemeProvider>
                     </SnackbarProvider>
