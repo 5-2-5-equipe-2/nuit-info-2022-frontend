@@ -29,7 +29,7 @@ export default function LoginForm() {
         resolver: yupResolver(validationSchema)
     });
     const dispatch = useAppDispatch();
-    const {enqueueSnackbar} = useSnackbar();
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     const onSubmit = (data: any) => {
         dispatch(loginAction({username: data.username, password: data.password}));
@@ -39,18 +39,26 @@ export default function LoginForm() {
     useEffect(() => {
         if (auth.error) {
             enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
+            closeSnackbar('authenticating');
         }
     }, [auth.error]);
 
     useEffect(() => {
         if (auth.isAuth) {
             enqueueSnackbar("Login successful", {variant: "success"});
+            closeSnackbar('authenticating');
         }
     }, [auth.isAuth]);
 
     useEffect(() => {
         if (auth.isAuthenticating) {
-            enqueueSnackbar("Authenticating ...", {variant: "info"});
+            // enqueue animated snackbar
+            enqueueSnackbar("Authenticating...", {
+                variant: "info",
+                persist: true,
+                key: 'authenticating',
+            });
+
         }
     }, [auth.isAuthenticating]);
 
