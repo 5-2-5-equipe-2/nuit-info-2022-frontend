@@ -9,6 +9,7 @@ import {useAppDispatch, useAppSelector} from "../hooks";
 import {useSnackbar} from "notistack";
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {Form} from "react-router-dom";
+import {AuthStatus} from "../features/auth/authSlice";
 
 
 const validationSchema = Yup.object().shape({
@@ -35,46 +36,44 @@ export default function LoginForm() {
     const auth = useAppSelector(state => state.auth);
 
     const onSubmit = (data: any) => {
-        if (!auth.isAuthenticating) {
+        if (auth.status !== AuthStatus.LOGGING_IN) {
             dispatch(loginAction({username: data.username, password: data.password}))
         }
-
-
     }
 
     useEffect(() => {
-        if (auth.error) {
-            enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
-            closeSnackbar('authenticating');
+        switch (auth.status) {
+            case AuthStatus.ERROR:
+                enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
+                closeSnackbar('authenticating');
+                break;
+            case AuthStatus.LOGGED_IN:
+                enqueueSnackbar("Login successful", {variant: "success"});
+                closeSnackbar('authenticating');
+                break;
+            case AuthStatus.LOGGING_IN:
+                enqueueSnackbar(
+                    <Grid container justifyContent="center" alignItems="center">
+                        <Grid item xs={11}>
+                            Authenticating
+                        </Grid>
+                        <Grid item xs={1}>
+                            <HourglassBottomIcon className={"rotate"}/>
+                        </Grid>
+                    </Grid>,
+
+                    {
+                        variant: "info",
+                        persist: true,
+                        key: 'authenticating',
+                    });
+                break;
+            case AuthStatus.LOGGED_OUT:
+                enqueueSnackbar("Logged out", {variant: "info"});
+                break;
         }
 
-
-        if (auth.isAuth) {
-            enqueueSnackbar("Login successful", {variant: "success"});
-            closeSnackbar('authenticating');
-        }
-
-
-        if (auth.isAuthenticating) {
-            // enqueue animated snackbar
-            enqueueSnackbar(
-                <Grid container justifyContent="center" alignItems="center">
-                    <Grid item xs={11}>
-                        Authenticating
-                    </Grid>
-                    <Grid item xs={1}>
-                        <HourglassBottomIcon className={"rotate"}/>
-                    </Grid>
-                </Grid>,
-
-                {
-                    variant: "info",
-                    persist: true,
-                    key: 'authenticating',
-                });
-
-        }
-    }, [auth.error, auth.isAuth, auth.isAuthenticating]);
+    }, [auth.status]);
 
     React.useEffect(() => {
         register("username", {required: true});

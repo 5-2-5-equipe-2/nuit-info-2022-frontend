@@ -22,8 +22,6 @@ export const refreshTokenAction = createAsyncThunk("auth/refresh-token", async (
 export const logoutAction = createAsyncThunk("auth/logout", async () => {
         const response = await Service.logout();
         return response.data;
-
-
     }
 );
 

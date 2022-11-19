@@ -1,25 +1,33 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {loginAction, logoutAction, refreshTokenAction} from "./actions";
 
+export const enum AuthStatus {
+    LOGGED_IN = "LOGGED_IN",
+    LOGGED_OUT = "LOGGED_OUT",
+    LOGGING_IN = "LOGGING_IN",
+    LOGGING_OUT = "LOGGING_OUT",
+    REFRESHING_TOKEN = "REFRESHING_TOKEN",
+    ERROR = "ERROR",
+    IDLE = "IDLE",
+}
+
+
 interface Auth {
     accessToken: string;
     refreshToken: string;
-    username: string;
+    id: number;
     expires: string;
-    isAuth: boolean;
-    isAuthenticating: boolean;
-    isRefreshing: boolean;
-    error?: string | null;
+    status: AuthStatus;
+    error: string | null;
 }
 
 const initialState: Auth = {
+    error: null,
     accessToken: "",
     refreshToken: "",
-    username: "",
+    id: -1,
     expires: "",
-    isAuth: false,
-    isAuthenticating: false,
-    isRefreshing: false,
+    status: AuthStatus.IDLE,
 }
 
 
@@ -32,31 +40,26 @@ export const authSlice = createSlice({
         builder.addCase(loginAction.fulfilled, (state, action) => {
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
-            state.username = action.payload.username;
+            state.id = action.payload.id;
             state.expires = new Date(action.payload.expires).toISOString();
-            state.isAuth = true;
-            state.isAuthenticating = false;
+            state.status = AuthStatus.LOGGED_IN;
             state.error = null;
         })
         builder.addCase(loginAction.rejected, (state, action) => {
-            state.isAuth = false;
-            state.error = action.error.message;
-            state.isAuthenticating = false;
-            state.isRefreshing = false;
+            state.status = AuthStatus.ERROR;
+            state.error = action.error.message || "Unknown error";
             state.accessToken = "";
             state.refreshToken = "";
-            state.username = "";
+            state.id = -1;
             state.expires = "";
 
         })
         builder.addCase(loginAction.pending, (state) => {
-            state.isAuth = false;
-            state.isAuthenticating = true;
-            state.isRefreshing = false;
+            state.status = AuthStatus.LOGGING_IN;
             state.error = null;
             state.accessToken = "";
             state.refreshToken = "";
-            state.username = "";
+            state.id = -1;
             state.expires = "";
 
         })
@@ -64,22 +67,27 @@ export const authSlice = createSlice({
         builder.addCase(logoutAction.fulfilled, (state) => {
                 state.accessToken = "";
                 state.refreshToken = "";
-                state.username = "";
+                state.id = -1;
                 state.expires = "";
-                state.isAuth = false;
-                state.isAuthenticating = false;
-                state.isRefreshing = false;
+                state.status = AuthStatus.LOGGED_OUT;
                 state.error = null;
             }
         )
         builder.addCase(logoutAction.rejected, (state, action) => {
-            state.isAuth = false;
-            state.error = action.error.message;
-            state.isAuthenticating = false;
-            state.isRefreshing = false;
+            state.status = AuthStatus.ERROR;
+            state.error = action.error.message || "Unknown error";
             state.accessToken = "";
             state.refreshToken = "";
-            state.username = "";
+            state.id = -1;
+            state.expires = "";
+
+        })
+        builder.addCase(logoutAction.pending, (state) => {
+            state.status = AuthStatus.LOGGING_OUT;
+            state.error = null;
+            state.accessToken = "";
+            state.refreshToken = "";
+            state.id = -1;
             state.expires = "";
 
         })
@@ -87,25 +95,19 @@ export const authSlice = createSlice({
         builder.addCase(refreshTokenAction.fulfilled, (state, action) => {
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
-            state.username = action.payload.username;
+            state.id = action.payload.id;
             state.expires = action.payload.expires.toISOString();
-            state.isAuth = true;
-            state.isAuthenticating = false;
-            state.isRefreshing = false;
+            state.status = AuthStatus.LOGGED_IN;
             state.error = null;
         });
         builder.addCase(refreshTokenAction.rejected, (state, action) => {
-            state.isAuth = false;
-            state.error = action.error.message;
-            state.isRefreshing = false;
-            state.isAuthenticating = false;
-
+            state.status = AuthStatus.ERROR;
+            state.error = action.error.message || "Unknown error";
         });
 
         builder.addCase(refreshTokenAction.pending, (state) => {
-            state.isAuth = false;
-            state.isRefreshing = true;
-            state.isAuthenticating = false;
+            state.status = AuthStatus.REFRESHING_TOKEN;
+            state.error = null;
 
         });
 

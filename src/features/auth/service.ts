@@ -1,12 +1,13 @@
 import axios from "axios";
 import {PUBLIC_API_URL} from "../../utils";
 
+
 const authServiceApi = axios.create({baseURL: PUBLIC_API_URL + "/auth"});
 
 interface AuthResponse {
+    id: number;
     accessToken: string;
     refreshToken: string;
-    username: string;
     expires: Date;
 }
 
