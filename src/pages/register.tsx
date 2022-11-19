@@ -92,7 +92,7 @@ export default function RegisterForm() {
     return (
         <Grid container spacing={3}>
             <Grid item><h1>Register</h1></Grid>
-            <Grid item spacing={3}>
+            <Grid item >
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={3}>
@@ -100,7 +100,7 @@ export default function RegisterForm() {
                             <TextField
                                 {...register("firstName")}
                                 error={!!errors.firstName}
-                                helperText={errors?.firstName?.message}
+                                helperText={<>{errors.firstName?.message}</>}
                                 label="First Name"
                                 fullWidth
                                 autoComplete="given-name"
@@ -110,7 +110,7 @@ export default function RegisterForm() {
                             <TextField
                                 {...register("lastName")}
                                 error={!!errors.lastName}
-                                helperText={errors?.lastName?.message}
+                                helperText={<>{errors?.lastName?.message}</>}
                                 label="Last Name"
                                 fullWidth
                                 autoComplete="family-name"
@@ -120,7 +120,7 @@ export default function RegisterForm() {
                             <TextField
                                 {...register("email")}
                                 error={!!errors.email}
-                                helperText={errors?.email?.message}
+                                helperText={<>{errors?.email?.message}</>}
                                 label="Email"
                                 fullWidth
                                 autoComplete="email"
@@ -130,7 +130,7 @@ export default function RegisterForm() {
                             <TextField
                                 {...register("username")}
                                 error={!!errors.username}
-                                helperText={errors?.username?.message}
+                                helperText={<>{errors?.username?.message}</>}
                                 label="Username"
                                 fullWidth
                                 autoComplete="username"
@@ -140,7 +140,7 @@ export default function RegisterForm() {
                             <TextField
                                 {...register("password")}
                                 error={!!errors.password}
-                                helperText={errors?.password?.message}
+                                helperText={<>{errors?.password?.message}</>}
                                 label="Password"
                                 fullWidth
                                 type="password"
@@ -151,7 +151,7 @@ export default function RegisterForm() {
                             <TextField
                                 {...register("passwordConfirmation")}
                                 error={!!errors.passwordConfirmation}
-                                helperText={errors?.passwordConfirmation?.message}
+                                helperText={<>{errors?.passwordConfirmation?.message}</>}
                                 label="Confirm Password"
                                 fullWidth
                                 type="password"
@@ -160,7 +160,7 @@ export default function RegisterForm() {
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel
-                                control={<Checkbox color="secondary" name="saveAddress"
+                                control={<Checkbox color="secondary"
                                                    value="yes" {...register("acceptTerms")}/>}
                                 label="I accept the terms and conditions."
                             />

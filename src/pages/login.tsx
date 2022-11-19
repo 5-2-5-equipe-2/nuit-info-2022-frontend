@@ -109,7 +109,7 @@ export default function LoginForm() {
                             <TextField
                                 {...register("username")}
                                 error={!!errors.username}
-                                helperText={errors?.username?.message}
+                                helperText={<>{errors?.username?.message}</>}
                                 label="Username"
                                 fullWidth
                                 autoComplete="username"
@@ -119,7 +119,7 @@ export default function LoginForm() {
                             <TextField
                                 {...register("password")}
                                 error={!!errors.password}
-                                helperText={errors?.password?.message}
+                                helperText={<>{errors?.password?.message}</>}
                                 label="Password"
                                 fullWidth
                                 type="password"
