@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {LoginPayload, RegisterPayload, Service} from "./service";
+import {LoginPayload, RefreshTokenPayload, RegisterPayload, Service} from "./service";
 
 export const loginAction = createAsyncThunk("auth/login", async (payload: LoginPayload) => {
     const response = await Service.login(payload);
@@ -12,8 +12,8 @@ export const registerAction = createAsyncThunk("auth/register", async (payload: 
     }
 );
 
-export const refreshTokenAction = createAsyncThunk("auth/refresh-token", async () => {
-        const response = await Service.refreshToken();
+export const refreshTokenAction = createAsyncThunk("auth/refresh-token", async (payload: RefreshTokenPayload) => {
+        const response = await Service.refreshToken(payload);
         return response.data;
 
     }

@@ -1,11 +1,14 @@
 import * as Yup from "yup";
 import {Form} from "react-router-dom";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {Button, Checkbox, FormControlLabel, Grid, TextField} from "@mui/material";
-import {useAppDispatch} from "../hooks";
+import {Button, Grid, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
 import {useSnackbar} from "notistack";
-import {registerAction} from "../features/auth/actions";
+import {signUp} from "../features/auth/service";
+import {useMutation} from "react-query";
+import {AxiosError} from "axios";
+import {useAppDispatch} from "../hooks";
+import {loginAction} from "../features/auth/actions";
 
 const validationSchema = Yup.object().shape({
 
@@ -35,64 +38,49 @@ const validationSchema = Yup.object().shape({
 });
 
 
-export default function RegisterForm() {
+export default function SignUp() {
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: {errors},
+        getValues
     } = useForm({
         resolver: yupResolver(validationSchema)
     });
     const dispatch = useAppDispatch();
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
+    const {mutate,} = useMutation(signUp, {
+        onSuccess: () => {
+            enqueueSnackbar("User Created Successfully!", {
+                variant: "success",
+            });
+            dispatch(loginAction({username: getValues("username"), password: getValues("password")}))
+        },
+        onError: (error: AxiosError) => {
+
+            if (error.response && error.response.data) {
+                // @ts-ignore
+                enqueueSnackbar(error.response.data.error, {
+                    variant: "error",
+                });
+            } else {
+                enqueueSnackbar(error.message, {
+                    variant: "error",
+                });
+            }
+
+        }
+    });
 
     const onSubmit = (data: any) => {
-        dispatch(registerAction(data));
+        console.log(data)
+        mutate(data);
     }
-    // const auth = useAppSelector(state => state.auth);
-    //
-    // useEffect(() => {
-    //     if (auth.error) {
-    //         enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
-    //         closeSnackbar('authenticating');
-    //     }
-    // }, [auth.error]);
-    //
-    // useEffect(() => {
-    //     if (auth.isAuth) {
-    //         enqueueSnackbar("Login successful", {variant: "success"});
-    //         closeSnackbar('authenticating');
-    //     }
-    // }, [auth.isAuth]);
-    //
-    // useEffect(() => {
-    //     if (auth.isAuthenticating) {
-    //         // enqueue animated snackbar
-    //         enqueueSnackbar("Authenticating...", {
-    //             variant: "info",
-    //             persist: true,
-    //             key: 'authenticating',
-    //         });
-    //
-    //     }
-    // }, [auth.isAuthenticating]);
-    //
-    // React.useEffect(() => {
-    //     if (auth.isRegistering) {
-    //         // enqueue animated snackbar
-    //         enqueueSnackbar("Registering...", {
-    //             variant: "info",
-    //             persist: true,
-    //             key: 'registering',
-    //         });
-    //     }
-    // }, [auth.isRegistering]);
-    //
-    // // use material-ui
+
     return (
         <Grid container spacing={3}>
             <Grid item><h1>Register</h1></Grid>
-            <Grid item >
+            <Grid item>
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={3}>
@@ -159,11 +147,22 @@ export default function RegisterForm() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox color="secondary"
-                                                   value="yes" {...register("acceptTerms")}/>}
-                                label="I accept the terms and conditions."
-                            />
+                            <Grid container
+                                  direction="row"
+                                  alignItems={"center"}
+                                  justifyContent={"center"}
+                                  spacing={1}
+                            >
+                                <Grid item><TextField
+                                    error={!!errors.acceptTerms}
+                                    helperText={<>{errors?.acceptTerms?.message}</>}
+                                    type={"checkbox"}
+                                    {...register("acceptTerms")}/>
+                                </Grid>
+                                <Grid item>
+                                    <p>I have read and agree to the Terms and Conditions</p>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                     <Button
@@ -174,8 +173,6 @@ export default function RegisterForm() {
                     >
                         Register
                     </Button>
-
-
                 </Form>
             </Grid>
         </Grid>

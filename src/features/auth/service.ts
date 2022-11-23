@@ -6,9 +6,8 @@ const authServiceApi = axios.create({baseURL: PUBLIC_API_URL + "/auth"});
 
 interface AuthResponse {
     id: number;
-    accessToken: string;
-    refreshToken: string;
-    expires: Date;
+    access: string;
+    refresh: string;
 }
 
 interface LoginPayload {
@@ -24,17 +23,27 @@ interface RegisterPayload {
     dateOfBirth?: Date;
 }
 
+interface RefreshTokenResponse {
+    access: string;
+    refresh: string;
+}
 
-export const login = (payload: LoginPayload) => authServiceApi.post<AuthResponse>("/login", payload);
-export const register = (payload: RegisterPayload) => authServiceApi.post<AuthResponse>("/register", payload);
-export const refreshToken = () => authServiceApi.post<AuthResponse>("/refresh-token");
+interface RefreshTokenPayload {
+    refresh: string;
+}
+
+
+export const login = (payload: LoginPayload) => authServiceApi.post<AuthResponse>("/token/", payload);
+export const signUp = (payload: RegisterPayload) => authServiceApi.post<AuthResponse>("/register", payload);
+export const refreshToken = (payload: RefreshTokenPayload) => authServiceApi.post<RefreshTokenResponse>("/token/refresh/", payload);
 export const logout = () => authServiceApi.post("/logout");
+
 
 export const Service = {
     login,
-    register,
+    register: signUp,
     refreshToken,
     logout,
 };
 
-export type {AuthResponse, LoginPayload, RegisterPayload};
+export type {AuthResponse, LoginPayload, RegisterPayload, RefreshTokenResponse, RefreshTokenPayload};

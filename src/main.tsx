@@ -10,7 +10,8 @@ import store from "./store";
 import {SnackbarProvider} from "notistack";
 import LoginForm from "./pages/login";
 import {createTheme, ThemeProvider} from "@mui/material";
-import RegisterForm from "./pages/register";
+import RegisterForm from "./pages/signUp";
+import {AuthHandler} from "./features/auth/AuthHandler";
 
 const queryClient = new QueryClient()
 
@@ -30,8 +31,8 @@ const router = createBrowserRouter([
                 <Provider store={store}>
                     <SnackbarProvider maxSnack={3}>
                         <ThemeProvider theme={currentTheme}>
+                            <AuthHandler/>
                             <Routes>
-
                                 <Route path="/login" element={<LoginForm/>}/>
                                 <Route path="/app" element={<App/>}/>
                                 <Route path="/register" element={<RegisterForm/>}/>
