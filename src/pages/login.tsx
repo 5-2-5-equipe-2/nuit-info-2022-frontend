@@ -7,7 +7,7 @@ import {loginAction} from "../features/auth/actions";
 import {useAppDispatch, useAppSelector} from "../hooks";
 import {Form} from "react-router-dom";
 import {AuthStatus} from "../features/auth/authSlice";
-
+import Typewriter from 'typewriter-effect';
 
 const validationSchema = Yup.object().shape({
 
@@ -18,7 +18,6 @@ const validationSchema = Yup.object().shape({
         .required('Password is required'),
 
 });
-
 
 export default function LoginForm() {
     const {
@@ -60,9 +59,17 @@ export default function LoginForm() {
         <Grid container spacing={3}
               direction={"column"}
         >
-            <Grid item><h1>Login</h1></Grid>
             <Grid item>
-
+                <h1>
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter.typeString('Login')
+                                .start()
+                        }}
+                    />
+                </h1>
+            </Grid>
+            <Grid item>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={3}>
 
