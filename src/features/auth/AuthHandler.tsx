@@ -59,10 +59,19 @@ export const AuthHandler = () => {
                 enqueueSnackbar("Logged out", {variant: "info"});
                 break;
             case AuthStatus.REFRESHING_TOKEN:
-                enqueueSnackbar("Refreshing token", {variant: "info"});
+                enqueueSnackbar("Refreshing token", {
+                    variant: "info",
+                    key: "refreshing-token",
+                    persist: true
+                });
                 break;
             case AuthStatus.REFRESHED_TOKEN:
-                enqueueSnackbar("Refreshed token", {variant: "success"});
+                enqueueSnackbar("Refreshed token", {
+                    variant: "success",
+                    persist: false,
+
+                });
+                closeSnackbar('refreshing-token');
                 setTimeout(() => {
                     dispatch(refreshTokenAction({
                             refresh: auth.refresh,
