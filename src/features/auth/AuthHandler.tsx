@@ -79,7 +79,6 @@ export const AuthHandler = () => {
                     ));
                 }, getRefreshWaitTime(auth.expires));
                 break;
-
         }
 
     }, [auth.status]);

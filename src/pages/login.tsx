@@ -8,6 +8,7 @@ import {useAppDispatch, useAppSelector} from "../hooks";
 import {Form} from "react-router-dom";
 import {AuthStatus} from "../features/auth/authSlice";
 import Typewriter from 'typewriter-effect';
+import {useSnackbar} from "notistack";
 
 const validationSchema = Yup.object().shape({
 
@@ -29,12 +30,16 @@ export default function LoginForm() {
     });
     const dispatch = useAppDispatch();
     const auth = useAppSelector(state => state.auth);
-
+    const {enqueueSnackbar} = useSnackbar();
     const onSubmit = (data: any) => {
         if (auth.status === AuthStatus.LOGGED_OUT || auth.status === AuthStatus.ERROR || auth.status === AuthStatus.IDLE) {
             dispatch(loginAction({username: data.username, password: data.password}))
+        } else {
+            enqueueSnackbar("You are already logged in!", {
+                variant: "error",
+            });
         }
-    }
+    };
 
     React.useEffect(() => {
         register("username", {required: true});

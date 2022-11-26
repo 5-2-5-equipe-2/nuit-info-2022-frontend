@@ -37,6 +37,19 @@ const initialState: Auth = {
     timeOfLastRefresh: 0,
 }
 
+function getInitialState(): Auth {
+    let auth = localStorage.getItem("auth");
+    let state: Auth = initialState;
+    if (auth) {
+        state = JSON.parse(auth);
+        state.status = AuthStatus.LOGGED_IN;
+        if ((new Date(state.expires * 1000) < new Date()) || !state.access || !state.refresh) {
+            state = initialState;
+        }
+    }
+    return state;
+}
+
 function decodeJwt(token: string) {
     try {
         return jwt_decode(token);
@@ -45,7 +58,7 @@ function decodeJwt(token: string) {
     }
 }
 
-function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadAction<AuthResponse|RefreshTokenResponse>) {
+function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadAction<AuthResponse | RefreshTokenResponse>) {
     state.access = action.payload.access;
     state.refresh = action.payload.refresh;
     if (action.payload.hasOwnProperty("id")) {
@@ -57,11 +70,13 @@ function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadActi
     if (exp) {
         state.expires = exp;
     }
+    // save state
+    localStorage.setItem("auth", JSON.stringify(state));
 }
 
 export const authSlice = createSlice({
     name: "auth",
-    initialState,
+    initialState: getInitialState,
     reducers: {},
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -81,6 +96,8 @@ export const authSlice = createSlice({
 
         builder.addCase(logoutAction.fulfilled, (state) => {
                 state.status = AuthStatus.LOGGED_OUT;
+                // delete save
+                localStorage.removeItem("auth");
             }
         )
         builder.addCase(logoutAction.rejected, (state, action) => {

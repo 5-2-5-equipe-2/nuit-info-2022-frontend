@@ -27,21 +27,21 @@ const router = createBrowserRouter([
     {
         path: "*",
         element:
-            <QueryClientProvider client={queryClient}>
-                <Provider store={store}>
-                    <SnackbarProvider maxSnack={3}>
+            <Provider store={store}>
+                <SnackbarProvider maxSnack={3}>
+                    <AuthHandler/>
+                    <QueryClientProvider client={queryClient}>
                         <ThemeProvider theme={currentTheme}>
-                            <AuthHandler/>
                             <Routes>
                                 <Route path="/login" element={<LoginForm/>}/>
                                 <Route path="/app" element={<App/>}/>
                                 <Route path="/register" element={<RegisterForm/>}/>
                             </Routes>
+                            <ReactQueryDevtools initialIsOpen={false}/>
                         </ThemeProvider>
-                    </SnackbarProvider>
-                    <ReactQueryDevtools initialIsOpen={false}/>
-                </Provider>
-            </QueryClientProvider>,
+                    </QueryClientProvider>
+                </SnackbarProvider>
+            </Provider>,
     },
 ]);
 
