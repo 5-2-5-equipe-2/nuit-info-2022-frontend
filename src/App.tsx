@@ -1,34 +1,23 @@
-import reactLogo from './assets/react.svg'
-import './App.css'
-import {increment, selectCount} from "./features/counter/counterSlice";
-import {useAppDispatch, useAppSelector} from "./hooks";
+import {Route, Routes} from "react-router-dom";
+import RegisterForm from "./pages/signUp";
+import React from "react";
+import ResponsiveAppBar from "./features/navbar/navbar";
+import {LoginPage} from "./pages/Login";
+import {Grid} from "@mui/material";
 
 function App() {
+    return <Grid container direction={"column"} alignItems={"stretch"} justifyContent={"stretch"}
+                 sx={{height: "100vh"}}>
 
-    const count = useAppSelector(selectCount)
-    const dispatch = useAppDispatch()
-    return <div className="App">
-        <div>
-            <a href="https://vitejs.dev" target="_blank">
-                <img src="/vite.svg" className="logo" alt="Vite logo"/>
-            </a>
-            <a href="https://reactjs.org" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo"/>
-            </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-            <button onClick={() => dispatch(increment())}>
-                count is {count}
-            </button>
-            <p>
-                Edit <code>src/App.tsx</code> and save to test HMR
-            </p>
-        </div>
-        <p className="read-the-docs">
-            Click on the Vite and React logos to learn more
-        </p>
-    </div>
+        <Grid item sx={{flexGrow: 1}}>
+            <ResponsiveAppBar/>
+        </Grid>
+        <Grid item sx={{flexGrow: 1}}>
+            <Routes>
+                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/register" element={<RegisterForm/>}/>
+            </Routes></Grid>
+    </Grid>
 }
 
 export default App

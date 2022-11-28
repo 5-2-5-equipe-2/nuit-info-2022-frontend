@@ -1,17 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import './index.css'
-import {createBrowserRouter, Route, RouterProvider, Routes,} from "react-router-dom";
+import {createBrowserRouter, RouterProvider,} from "react-router-dom";
 import {QueryClient, QueryClientProvider} from 'react-query'
 import {ReactQueryDevtools} from "react-query/devtools";
 import {Provider} from "react-redux";
 import store from "./store";
 import {SnackbarProvider} from "notistack";
-import LoginForm from "./pages/login";
 import {createTheme, ThemeProvider} from "@mui/material";
-import RegisterForm from "./pages/signUp";
-import {AuthHandler} from "./features/auth/AuthHandler";
+import {AuthHandler} from "./features/auth/components/AuthHandler";
+import App from "./App";
 
 const queryClient = new QueryClient()
 
@@ -30,16 +28,13 @@ const router = createBrowserRouter([
             <Provider store={store}>
                 <SnackbarProvider maxSnack={3}>
                     <AuthHandler/>
-                    <QueryClientProvider client={queryClient}>
-                        <ThemeProvider theme={currentTheme}>
-                            <Routes>
-                                <Route path="/login" element={<LoginForm/>}/>
-                                <Route path="/app" element={<App/>}/>
-                                <Route path="/register" element={<RegisterForm/>}/>
-                            </Routes>
+                    <ThemeProvider theme={currentTheme}>
+                        <QueryClientProvider client={queryClient}>
+                            <App/>
                             <ReactQueryDevtools initialIsOpen={false}/>
-                        </ThemeProvider>
-                    </QueryClientProvider>
+                        </QueryClientProvider>
+                    </ThemeProvider>
+
                 </SnackbarProvider>
             </Provider>,
     },
