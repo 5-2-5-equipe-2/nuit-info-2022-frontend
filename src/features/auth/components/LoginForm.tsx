@@ -3,10 +3,10 @@ import {useForm} from "react-hook-form";
 import {Button, Grid, TextField} from "@mui/material";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import {loginAction} from "../features/auth/actions";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import {loginAction} from "../actions";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {Form} from "react-router-dom";
-import {AuthStatus} from "../features/auth/authSlice";
+import {AuthStatus} from "../authSlice";
 import Typewriter from 'typewriter-effect';
 import {useSnackbar} from "notistack";
 
@@ -64,16 +64,6 @@ export default function LoginForm() {
         <Grid container spacing={3}
               direction={"column"}
         >
-            <Grid item>
-                <h1>
-                    <Typewriter
-                        onInit={(typewriter) => {
-                            typewriter.typeString('Login')
-                                .start()
-                        }}
-                    />
-                </h1>
-            </Grid>
             <Grid item>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={3}>

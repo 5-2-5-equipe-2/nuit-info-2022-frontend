@@ -1,11 +1,11 @@
 import * as React from "react";
 import {useEffect} from "react";
-import {AuthStatus} from "./authSlice";
-import {refreshTokenAction} from "./actions";
+import {AuthStatus} from "../authSlice";
+import {refreshTokenAction} from "../actions";
 import {Grid} from "@mui/material";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import {useSnackbar} from "notistack";
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 
 
 function getRefreshWaitTime(exp: number, offset: number = 290000): number {
