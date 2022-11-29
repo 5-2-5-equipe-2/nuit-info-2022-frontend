@@ -10,6 +10,8 @@ import {SnackbarProvider} from "notistack";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {AuthHandler} from "./features/auth/components/AuthHandler";
 import App from "./App";
+import {ApolloProvider} from "@apollo/client";
+import {privateClient, publicClient} from "./utils/graphqlAPI";
 
 const queryClient = new QueryClient()
 
@@ -25,18 +27,22 @@ const router = createBrowserRouter([
     {
         path: "*",
         element:
-            <Provider store={store}>
-                <SnackbarProvider maxSnack={3}>
-                    <AuthHandler/>
-                    <ThemeProvider theme={currentTheme}>
-                        <QueryClientProvider client={queryClient}>
-                            <App/>
-                            <ReactQueryDevtools initialIsOpen={false}/>
-                        </QueryClientProvider>
-                    </ThemeProvider>
+            <ApolloProvider client={publicClient}>
+                <ApolloProvider client={privateClient}>
+                    <Provider store={store}>
+                        <SnackbarProvider maxSnack={3}>
+                            <AuthHandler/>
+                            <ThemeProvider theme={currentTheme}>
+                                <QueryClientProvider client={queryClient}>
+                                    <App/>
+                                    <ReactQueryDevtools initialIsOpen={false}/>
+                                </QueryClientProvider>
+                            </ThemeProvider>
 
-                </SnackbarProvider>
-            </Provider>,
+                        </SnackbarProvider>
+                    </Provider>
+                </ApolloProvider>
+            </ApolloProvider>,
     },
 ]);
 

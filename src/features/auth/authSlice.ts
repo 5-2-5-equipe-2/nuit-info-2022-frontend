@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {loginAction, logoutAction, refreshTokenAction} from "./actions";
 import jwt_decode from 'jwt-decode';
 import {WritableDraft} from "immer/dist/internal";
-import {AuthResponse, RefreshTokenResponse} from "./service";
+import {ValidLoginResult} from "../../generated/graphql";
 
 
 export const enum AuthStatus {
@@ -58,7 +58,8 @@ function decodeJwt(token: string) {
     }
 }
 
-function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadAction<AuthResponse | RefreshTokenResponse>) {
+function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadAction<ValidLoginResult>) {
+    console.log(action.payload);
     state.access = action.payload.access;
     state.refresh = action.payload.refresh;
     if (action.payload.hasOwnProperty("id")) {

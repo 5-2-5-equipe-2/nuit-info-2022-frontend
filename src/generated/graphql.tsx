@@ -120,3 +120,5 @@ export type ValidLoginResult = {
   access: Scalars['String'];
   refresh: Scalars['String'];
 };
+export { gql };
+

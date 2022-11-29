@@ -8,7 +8,7 @@ import {useSnackbar} from "notistack";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 
 
-function getRefreshWaitTime(exp: number, offset: number = 290000): number {
+function getRefreshWaitTime(exp: number, offset: number = 0): number {
     const now = new Date().getTime();
     const diff = (new Date(exp * 1000).getTime()) - now - offset;
     return diff < 0 ? 0 : diff;

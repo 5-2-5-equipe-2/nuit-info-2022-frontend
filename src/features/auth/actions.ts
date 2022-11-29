@@ -1,27 +1,28 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {LoginPayload, RefreshTokenPayload, RegisterPayload, Service} from "./service";
+import {Service} from "./service";
+import {CreateUserInput, LoginInput, RefreshInput} from "../../generated/graphql";
 
-export const loginAction = createAsyncThunk("auth/login", async (payload: LoginPayload) => {
+export const loginAction = createAsyncThunk("auth/login", async (payload: LoginInput) => {
     const response = await Service.login(payload);
-    return response.data;
+    console.log(response);
+    return response.data.loginUser;
 });
 
-export const registerAction = createAsyncThunk("auth/register", async (payload: RegisterPayload) => {
+export const registerAction = createAsyncThunk("auth/register", async (payload: CreateUserInput) => {
         const response = await Service.register(payload);
         return response.data;
     }
 );
 
-export const refreshTokenAction = createAsyncThunk("auth/refresh-token", async (payload: RefreshTokenPayload) => {
+export const refreshTokenAction = createAsyncThunk("auth/refresh-token", async (payload: RefreshInput) => {
         const response = await Service.refreshToken(payload);
-        return response.data;
+        return response.data.refreshUser;
 
     }
 );
 
 export const logoutAction = createAsyncThunk("auth/logout", async () => {
-        const response = await Service.logout();
-        return response.data;
+        return true;
     }
 );
 
