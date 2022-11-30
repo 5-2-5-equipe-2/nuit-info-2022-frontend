@@ -16,23 +16,31 @@ export const LoginPage = () => {
 
     return (
         <animated.div style={styles}>
+
             <Grid container justifyContent="center" alignItems="center" direction={"column"}>
 
-                <Paper elevation={6} sx={{p: 2, m: 2, width: "100%", maxWidth: "500px"}}>
-                    <Grid item>
-                        <h1>
-                            <Typewriter
-                                onInit={(typewriter) => {
-                                    typewriter.typeString('Login')
-                                        .start()
-                                }}
-                            />
-                        </h1>
-                    </Grid>
-                    <Grid item>
-                        <LoginForm/>
-                    </Grid>
-                </Paper>
+                <Grid item>
+                    <Paper elevation={3} sx={{width: "100%", maxWidth: "500px"}}>
+
+                        <Grid container direction={"column"} justifyContent={"center"} alignItems={"center"}>
+                            <Grid item>
+                                <h1>
+                                    <Typewriter
+                                        onInit={(typewriter) => {
+                                            typewriter.typeString('Login')
+                                                .start()
+                                        }}
+                                    />
+                                </h1>
+                            </Grid>
+                            <Grid item sx={{padding: "1rem"}}>
+                                <LoginForm/>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+
+                </Grid>
+
             </Grid>
         </animated.div>
 
