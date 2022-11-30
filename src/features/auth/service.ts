@@ -63,6 +63,52 @@ export const signUp = (payload: CreateUserInput) => {
 }
 
 
+const UPDATE_USER_MUTATION = gql`
+    mutation ($node: UpdateUserInput!) {
+        updateUser(input: $node) {
+            id,
+        }
+    }
+`;
+
+export const updateUser = (payload: CreateUserInput) => {
+    return publicClient.mutate(
+        {
+            mutation: UPDATE_USER_MUTATION,
+            variables: {
+                node: payload
+            }
+        }
+    );
+}
+
+export const GET_USER_BY_ID_QUERY = gql`
+    query($id : ID!) {
+        getUserById(id:$id){
+            id,
+            username,
+            email,
+            firstName,
+            lastName,
+            createdAt,
+            updatedAt,
+            scopeId
+        }
+    }
+`;
+
+
+export const getUserById = (id: number) => {
+    return publicClient.query(
+        {
+            query: GET_USER_BY_ID_QUERY,
+            variables: {
+                id
+            }
+        }
+    );
+}
+
 export const Service = {
     login,
     register: signUp,

@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {loginAction, logoutAction, refreshTokenAction} from "./actions";
 import jwt_decode from 'jwt-decode';
 import {WritableDraft} from "immer/dist/internal";
-import {ValidLoginResult} from "../../generated/graphql";
+import {User, ValidLoginResult} from "../../generated/graphql";
 
 
 export const enum AuthStatus {
@@ -18,6 +18,7 @@ export const enum AuthStatus {
 
 
 export interface Auth {
+    user: User | null;
     access: string;
     refresh: string;
     id: number;
@@ -28,6 +29,7 @@ export interface Auth {
 }
 
 const initialState: Auth = {
+    user: null,
     error: null,
     access: "",
     refresh: "",
@@ -62,15 +64,17 @@ function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadActi
     console.log(action.payload);
     state.access = action.payload.access;
     state.refresh = action.payload.refresh;
-    if (action.payload.hasOwnProperty("id")) {
-        // @ts-ignore
-        state.id = action.payload?.id;
-    }
     // @ts-ignore
     let exp = decodeJwt(action.payload.access).exp;
     if (exp) {
         state.expires = exp;
     }
+    // @ts-ignore
+    let id = decodeJwt(action.payload.access).sub;
+    if (id) {
+        state.id = id;
+    }
+
     // save state
     localStorage.setItem("auth", JSON.stringify(state));
 }
@@ -78,12 +82,17 @@ function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadActi
 export const authSlice = createSlice({
     name: "auth",
     initialState: getInitialState,
-    reducers: {},
+    reducers: {
+        setUser: (state, action: PayloadAction<User>) => {
+            state.user = action.payload;
+        }
+    },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(loginAction.fulfilled, (state, action) => {
             modifyStateOnValidToken(state, action);
             state.status = AuthStatus.LOGGED_IN;
+
         })
         builder.addCase(loginAction.rejected, (state, action) => {
             state.status = AuthStatus.ERROR;
@@ -130,5 +139,6 @@ export const authSlice = createSlice({
 })
 
 export default authSlice.reducer
+export const {setUser} = authSlice.actions
 
 

@@ -1,5 +1,4 @@
-import {gql} from '@apollo/client';
-
+import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,119 +6,123 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-    ID: string;
-    String: string;
-    Boolean: boolean;
-    Int: number;
-    Float: number;
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
 };
 
 export type CreateScopeInput = {
-    description: Scalars['String'];
-    title: Scalars['String'];
+  description: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type CreateUserInput = {
-    email: Scalars['String'];
-    password: Scalars['String'];
-    scopeId: Scalars['Int'];
-    username: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
+  scopeId: Scalars['Int'];
+  username: Scalars['String'];
 };
 
 export type DeleteScopeResult = {
-    __typename?: 'DeleteScopeResult';
-    rowsAffected: Scalars['Int'];
-    success: Scalars['Boolean'];
+  __typename?: 'DeleteScopeResult';
+  rowsAffected: Scalars['Int'];
+  success: Scalars['Boolean'];
 };
 
 export type DeleteUserResult = {
-    __typename?: 'DeleteUserResult';
-    rowsAffected: Scalars['Int'];
-    success: Scalars['Boolean'];
+  __typename?: 'DeleteUserResult';
+  rowsAffected: Scalars['Int'];
+  success: Scalars['Boolean'];
 };
 
 export type LoginInput = {
-    password: Scalars['String'];
-    username: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Mutation = {
-    __typename?: 'Mutation';
-    createScope: Scope;
-    createUser: User;
-    deleteScope: DeleteScopeResult;
-    deleteUser: DeleteUserResult;
-    loginUser: ValidLoginResult;
-    refreshUser: ValidLoginResult;
+  __typename?: 'Mutation';
+  createScope: Scope;
+  createUser: User;
+  deleteScope: DeleteScopeResult;
+  deleteUser: DeleteUserResult;
+  loginUser: ValidLoginResult;
+  refreshUser: ValidLoginResult;
 };
 
 
 export type MutationCreateScopeArgs = {
-    input: CreateScopeInput;
+  input: CreateScopeInput;
 };
 
 
 export type MutationCreateUserArgs = {
-    input: CreateUserInput;
+  input: CreateUserInput;
 };
 
 
 export type MutationDeleteScopeArgs = {
-    id: Scalars['Int'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationDeleteUserArgs = {
-    id: Scalars['Int'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationLoginUserArgs = {
-    input: LoginInput;
+  input: LoginInput;
 };
 
 
 export type MutationRefreshUserArgs = {
-    input: RefreshInput;
+  input: RefreshInput;
 };
 
 export type Query = {
-    __typename?: 'Query';
-    getUserById?: Maybe<User>;
-    getUsers: Array<User>;
+  __typename?: 'Query';
+  getUserById?: Maybe<User>;
+  getUsers: Array<User>;
 };
 
 
 export type QueryGetUserByIdArgs = {
-    id: Scalars['Int'];
+  id: Scalars['Int'];
 };
 
 export type RefreshInput = {
-    refresh: Scalars['String'];
+  refresh: Scalars['String'];
 };
 
 export type Scope = {
-    __typename?: 'Scope';
-    description: Scalars['String'];
-    id: Scalars['Int'];
-    title: Scalars['String'];
+  __typename?: 'Scope';
+  description: Scalars['String'];
+  id: Scalars['Int'];
+  title: Scalars['String'];
 };
 
 export type User = {
-    __typename?: 'User';
-    createdAt: Scalars['String'];
-    email: Scalars['String'];
-    id: Scalars['Int'];
-    password: Scalars['String'];
-    scopeId: Scalars['Int'];
-    updatedAt: Scalars['String'];
-    username: Scalars['String'];
+  __typename?: 'User';
+  createdAt: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['Int'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
+  scopeId: Scalars['Int'];
+  updatedAt: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type ValidLoginResult = {
-    __typename?: 'ValidLoginResult';
-    access: Scalars['String'];
-    refresh: Scalars['String'];
+  __typename?: 'ValidLoginResult';
+  access: Scalars['String'];
+  refresh: Scalars['String'];
 };
 export {gql};
 

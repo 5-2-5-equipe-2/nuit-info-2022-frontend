@@ -27,6 +27,7 @@ export const AuthHandler = () => {
                     closeSnackbar('authenticating');
                     break;
                 case AuthStatus.LOGGED_IN:
+                    // get the user
                     enqueueSnackbar("Login successful", {
                         variant: "success",
                         persist: false,

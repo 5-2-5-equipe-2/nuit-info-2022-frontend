@@ -4,7 +4,6 @@ import {CreateUserInput, LoginInput, RefreshInput} from "../../generated/graphql
 
 export const loginAction = createAsyncThunk("auth/login", async (payload: LoginInput) => {
     const response = await Service.login(payload);
-    console.log(response);
     return response.data.loginUser;
 });
 

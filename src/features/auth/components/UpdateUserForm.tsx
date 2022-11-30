@@ -1,27 +1,22 @@
 import * as Yup from "yup";
 import {Form} from "react-router-dom";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, Divider, Grid, TextField} from "@mui/material";
 import {useForm} from "react-hook-form";
 import {useSnackbar} from "notistack";
-import {useMutation} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import {AxiosError} from "axios";
 import {useAppDispatch} from "../../../hooks";
-import {signUp} from "../service";
+import {getUserById, updateUser} from "../service";
 import {loginAction} from "../actions";
-import {CreateUserInput} from "../../../generated/graphql";
+
+import {RootState} from "../../../store";
+import {useSelector} from "react-redux";
 
 const validationSchema = Yup.object().shape({
 
     username: Yup.string()
         .required('Username is required'),
-
-    password: Yup.string()
-        .required('Password is required'),
-
-    passwordConfirmation: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Password confirmation is required'),
 
     email: Yup.string()
         .email('Email is invalid')
@@ -33,13 +28,10 @@ const validationSchema = Yup.object().shape({
     lastName: Yup.string()
         .required('Last Name is required'),
 
-    acceptTerms: Yup.bool()
-        .oneOf([true], 'Accept Terms & Conditions is required')
-
 });
 
 
-export const SignUpForm = () => {
+export const UpdateUserForm = () => {
 
     const {
         register,
@@ -51,9 +43,9 @@ export const SignUpForm = () => {
     });
     const dispatch = useAppDispatch();
     const {enqueueSnackbar} = useSnackbar();
-    const {mutate,} = useMutation(signUp, {
+    const {mutate,} = useMutation(updateUser, {
         onSuccess: () => {
-            enqueueSnackbar("User Created Successfully!", {
+            enqueueSnackbar("User Updated Successfully!", {
                 variant: "success",
             });
             dispatch(loginAction({username: getValues("username"), password: getValues("password")}))
@@ -75,19 +67,17 @@ export const SignUpForm = () => {
     });
 
     const onSubmit = (data: any) => {
-        let d: CreateUserInput = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            username: data.username,
-            password: data.password,
-            scopeId: 1
-
-        }
-        mutate(d);
+        mutate(data);
     }
+    const auth = useSelector((state: RootState) => state.auth);
+    const {data, isLoading, isError} = useQuery(['user', auth.id], () => getUserById(auth.id), {
+        enabled: !!auth.id,
+        refetchOnWindowFocus: false,
+        retry: false,
+    });
 
-
+    if (isLoading) return <p>Loading...</p>;
+    if (isError) return <p>Error</p>;
     return <Form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
@@ -98,6 +88,7 @@ export const SignUpForm = () => {
                     label="First Name"
                     fullWidth
                     autoComplete="given-name"
+                    defaultValue={data?.data.getUserById.firstName}
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -108,6 +99,7 @@ export const SignUpForm = () => {
                     label="Last Name"
                     fullWidth
                     autoComplete="family-name"
+                    defaultValue={data?.data.getUserById.lastName}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -118,6 +110,7 @@ export const SignUpForm = () => {
                     label="Email"
                     fullWidth
                     autoComplete="email"
+                    defaultValue={data?.data.getUserById.email}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -128,56 +121,18 @@ export const SignUpForm = () => {
                     label="Username"
                     fullWidth
                     autoComplete="username"
+                    defaultValue={data?.data.getUserById.username}
                 />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    {...register("password")}
-                    error={!!errors.password}
-                    helperText={<>{errors?.password?.message}</>}
-                    label="Password"
-                    fullWidth
-                    type="password"
-                    autoComplete="new-password"
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    {...register("passwordConfirmation")}
-                    error={!!errors.passwordConfirmation}
-                    helperText={<>{errors?.passwordConfirmation?.message}</>}
-                    label="Confirm Password"
-                    fullWidth
-                    type="password"
-                    autoComplete="new-password"
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Grid container
-                      direction="row"
-                      alignItems={"center"}
-                      justifyContent={"center"}
-                      spacing={1}
-                >
-                    <Grid item><TextField
-                        error={!!errors.acceptTerms}
-                        helperText={<>{errors?.acceptTerms?.message}</>}
-                        type={"checkbox"}
-                        {...register("acceptTerms")}/>
-                    </Grid>
-                    <Grid item>
-                        <p>I have read and agree to the Terms and Conditions</p>
-                    </Grid>
-                </Grid>
             </Grid>
         </Grid>
+        <Divider sx={{my: 3}}/>
         <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
         >
-            Sign Up
+            Update
         </Button>
     </Form>
 }
