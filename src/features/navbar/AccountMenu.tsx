@@ -91,7 +91,7 @@ export default function AccountMenu() {
                     </ListItemIcon>
                     Settings
                 </MenuItem>
-                <Link to="/logout">
+                <Link to="/logout" style={{textDecoration: "none"}}>
                     <MenuItem>
                         <ListItemIcon>
                             <Logout fontSize="small"/>

@@ -9,6 +9,7 @@ import {Particles} from 'react-tsparticles';
 import {ISourceOptions, Main} from "tsparticles";
 import {loadTrianglesPreset} from "tsparticles-preset-triangles";
 import {Logout} from "./pages/Logout";
+import UpdateUser from "./pages/Update";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/logout" element={<Logout/>}/>
+                    <Route path="/update" element={<UpdateUser/>}/>
                 </Routes></Grid>
         </Grid>
     </>;
