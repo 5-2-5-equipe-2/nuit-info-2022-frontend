@@ -17,7 +17,7 @@ export const enum AuthStatus {
 }
 
 
-interface Auth {
+export interface Auth {
     access: string;
     refresh: string;
     id: number;
@@ -130,4 +130,5 @@ export const authSlice = createSlice({
 })
 
 export default authSlice.reducer
+
 

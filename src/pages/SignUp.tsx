@@ -1,10 +1,10 @@
-import LoginForm from "../features/auth/components/LoginForm";
 import {Grid, Paper} from "@mui/material";
+import {animated, useSpring} from "react-spring";
 import Typewriter from "typewriter-effect";
 import * as React from "react";
-import {animated, useSpring} from "react-spring";
+import {SignUpForm} from "../features/auth/components/SignUpForm";
 
-export const LoginPage = () => {
+export default function SignUp() {
     const styles = useSpring({
         from: {opacity: 0, transform: "translate3d(0,-40px,0)"},
         to: {opacity: 1, transform: "translate3d(0,0px,0)"},
@@ -26,14 +26,14 @@ export const LoginPage = () => {
                                 <h1>
                                     <Typewriter
                                         onInit={(typewriter) => {
-                                            typewriter.typeString('Login')
+                                            typewriter.typeString('Sign Up')
                                                 .start()
                                         }}
                                     />
                                 </h1>
                             </Grid>
                             <Grid item sx={{padding: "1rem"}}>
-                                <LoginForm/>
+                                <SignUpForm/>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -43,4 +43,5 @@ export const LoginPage = () => {
         </animated.div>
 
     );
+
 }
