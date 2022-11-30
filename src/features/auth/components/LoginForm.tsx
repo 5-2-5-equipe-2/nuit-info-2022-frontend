@@ -1,16 +1,13 @@
 import * as React from "react";
-import {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {Button, Grid, TextField} from "@mui/material";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import {loginAction} from "../features/auth/actions";
-import {useAppDispatch, useAppSelector} from "../hooks";
-import {useSnackbar} from "notistack";
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import {loginAction} from "../actions";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {Form} from "react-router-dom";
-import {AuthStatus} from "../features/auth/authSlice";
-
+import {AuthStatus} from "../authSlice";
+import {useSnackbar} from "notistack";
 
 const validationSchema = Yup.object().shape({
 
@@ -22,7 +19,6 @@ const validationSchema = Yup.object().shape({
 
 });
 
-
 export default function LoginForm() {
     const {
         register,
@@ -32,48 +28,17 @@ export default function LoginForm() {
         resolver: yupResolver(validationSchema)
     });
     const dispatch = useAppDispatch();
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const auth = useAppSelector(state => state.auth);
-
+    const {enqueueSnackbar} = useSnackbar();
     const onSubmit = (data: any) => {
-        if (auth.status !== AuthStatus.LOGGING_IN) {
+        if (auth.status === AuthStatus.LOGGED_OUT || auth.status === AuthStatus.ERROR || auth.status === AuthStatus.IDLE) {
             dispatch(loginAction({username: data.username, password: data.password}))
+        } else {
+            enqueueSnackbar("You are already logged in!", {
+                variant: "error",
+            });
         }
-    }
-
-    useEffect(() => {
-        switch (auth.status) {
-            case AuthStatus.ERROR:
-                enqueueSnackbar(auth.error || "unknown error", {variant: "error"});
-                closeSnackbar('authenticating');
-                break;
-            case AuthStatus.LOGGED_IN:
-                enqueueSnackbar("Login successful", {variant: "success"});
-                closeSnackbar('authenticating');
-                break;
-            case AuthStatus.LOGGING_IN:
-                enqueueSnackbar(
-                    <Grid container justifyContent="center" alignItems="center">
-                        <Grid item xs={11}>
-                            Authenticating
-                        </Grid>
-                        <Grid item xs={1}>
-                            <HourglassBottomIcon className={"rotate"}/>
-                        </Grid>
-                    </Grid>,
-
-                    {
-                        variant: "info",
-                        persist: true,
-                        key: 'authenticating',
-                    });
-                break;
-            case AuthStatus.LOGGED_OUT:
-                enqueueSnackbar("Logged out", {variant: "info"});
-                break;
-        }
-
-    }, [auth.status]);
+    };
 
     React.useEffect(() => {
         register("username", {required: true});
@@ -98,9 +63,7 @@ export default function LoginForm() {
         <Grid container spacing={3}
               direction={"column"}
         >
-            <Grid item><h1>Login</h1></Grid>
             <Grid item>
-
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={3}>
 

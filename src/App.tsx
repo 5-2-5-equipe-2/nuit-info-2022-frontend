@@ -1,34 +1,76 @@
-import reactLogo from './assets/react.svg'
-import './App.css'
-import {increment, selectCount} from "./features/counter/counterSlice";
-import {useAppDispatch, useAppSelector} from "./hooks";
+import {Route, Routes} from "react-router-dom";
+import RegisterForm from "./pages/signUp";
+import React from "react";
+import ResponsiveAppBar from "./features/navbar/navbar";
+import {LoginPage} from "./pages/Login";
+import {Grid} from "@mui/material";
+import {Particles} from 'react-tsparticles';
+// @ts-ignore
+import {ISourceOptions, Main} from "tsparticles";
+import {loadTrianglesPreset} from "tsparticles-preset-triangles";
+
 
 function App() {
+    const options: ISourceOptions = {
+        preset: 'triangles',
+        fpsLimit: 120,
+        interactivity: {
+            events: {
+                onClick: {
+                    enable: true,
+                    mode: "push",
+                },
+                onHover: {
+                    enable: true,
+                    mode: "repulse",
+                },
+                resize: true,
+            },
+            modes: {
+                push: {
+                    quantity: 100,
 
-    const count = useAppSelector(selectCount)
-    const dispatch = useAppDispatch()
-    return <div className="App">
-        <div>
-            <a href="https://vitejs.dev" target="_blank">
-                <img src="/vite.svg" className="logo" alt="Vite logo"/>
-            </a>
-            <a href="https://reactjs.org" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo"/>
-            </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-            <button onClick={() => dispatch(increment())}>
-                count is {count}
-            </button>
-            <p>
-                Edit <code>src/App.tsx</code> and save to test HMR
-            </p>
-        </div>
-        <p className="read-the-docs">
-            Click on the Vite and React logos to learn more
-        </p>
-    </div>
+                },
+                repulse: {
+                    distance: 200,
+                    duration: 1,
+                },
+            },
+        },
+        particles: {
+            collisions: {
+                enable: true,
+            },
+            move: {
+                directions: "none",
+                enable: true,
+                outModes: {
+                    default: "bounce",
+                },
+                random: false,
+                speed: 2,
+                straight: false,
+            },
+        },
+    }
+
+    const initialize = async (instance: Main) => {
+        await loadTrianglesPreset(instance);
+    };
+    return <><Particles options={options} init={initialize}/>
+        <Grid container direction={"column"} alignItems={"stretch"} justifyContent={"stretch"}
+              sx={{height: "100vh"}}>
+
+            <Grid item sx={{flexGrow: 1}}>
+                <ResponsiveAppBar/>
+            </Grid>
+            <Grid item sx={{flexGrow: 1}}>
+                <Routes>
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/register" element={<RegisterForm/>}/>
+                </Routes></Grid>
+        </Grid>
+    </>;
 }
 
 export default App

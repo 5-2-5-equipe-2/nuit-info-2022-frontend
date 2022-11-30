@@ -1,5 +1,9 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {loginAction, logoutAction, refreshTokenAction} from "./actions";
+import jwt_decode from 'jwt-decode';
+import {WritableDraft} from "immer/dist/internal";
+import {ValidLoginResult} from "../../generated/graphql";
+
 
 export const enum AuthStatus {
     LOGGED_IN = "LOGGED_IN",
@@ -9,39 +13,76 @@ export const enum AuthStatus {
     REFRESHING_TOKEN = "REFRESHING_TOKEN",
     ERROR = "ERROR",
     IDLE = "IDLE",
+    REFRESHED_TOKEN = "REFRESHED_TOKEN",
 }
 
 
 interface Auth {
-    accessToken: string;
-    refreshToken: string;
+    access: string;
+    refresh: string;
     id: number;
-    expires: string;
+    expires: number;
     status: AuthStatus;
     error: string | null;
+    timeOfLastRefresh: number;
 }
 
 const initialState: Auth = {
     error: null,
-    accessToken: "",
-    refreshToken: "",
+    access: "",
+    refresh: "",
     id: -1,
-    expires: "",
+    expires: -1,
     status: AuthStatus.IDLE,
+    timeOfLastRefresh: 0,
 }
 
+function getInitialState(): Auth {
+    let auth = localStorage.getItem("auth");
+    let state: Auth = initialState;
+    if (auth) {
+        state = JSON.parse(auth);
+        state.status = AuthStatus.LOGGED_IN;
+        if ((new Date(state.expires * 1000) < new Date()) || !state.access || !state.refresh) {
+            state = initialState;
+        }
+    }
+    return state;
+}
+
+function decodeJwt(token: string) {
+    try {
+        return jwt_decode(token);
+    } catch (Error) {
+        return null;
+    }
+}
+
+function modifyStateOnValidToken(state: WritableDraft<Auth>, action: PayloadAction<ValidLoginResult>) {
+    console.log(action.payload);
+    state.access = action.payload.access;
+    state.refresh = action.payload.refresh;
+    if (action.payload.hasOwnProperty("id")) {
+        // @ts-ignore
+        state.id = action.payload?.id;
+    }
+    // @ts-ignore
+    let exp = decodeJwt(action.payload.access).exp;
+    if (exp) {
+        state.expires = exp;
+    }
+    // save state
+    localStorage.setItem("auth", JSON.stringify(state));
+}
 
 export const authSlice = createSlice({
     name: "auth",
-    initialState,
+    initialState: getInitialState,
     reducers: {},
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(loginAction.fulfilled, (state, action) => {
-            state.accessToken = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
-            state.id = action.payload.id;
-            state.expires = action.payload.expires.toISOString();
+            modifyStateOnValidToken(state, action);
             state.status = AuthStatus.LOGGED_IN;
         })
         builder.addCase(loginAction.rejected, (state, action) => {
@@ -56,6 +97,8 @@ export const authSlice = createSlice({
 
         builder.addCase(logoutAction.fulfilled, (state) => {
                 state.status = AuthStatus.LOGGED_OUT;
+                // delete save
+                localStorage.removeItem("auth");
             }
         )
         builder.addCase(logoutAction.rejected, (state, action) => {
@@ -69,11 +112,8 @@ export const authSlice = createSlice({
         })
 
         builder.addCase(refreshTokenAction.fulfilled, (state, action) => {
-            state.accessToken = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
-            state.id = action.payload.id;
-            state.expires = action.payload.expires.toISOString();
-            state.status = AuthStatus.LOGGED_IN;
+            modifyStateOnValidToken(state, action);
+            state.status = AuthStatus.REFRESHED_TOKEN;
         });
         builder.addCase(refreshTokenAction.rejected, (state, action) => {
             state.status = AuthStatus.ERROR;
@@ -88,9 +128,6 @@ export const authSlice = createSlice({
 
     }
 })
-
-// Create selectors
-export const selectAuth = (state: Auth) => state;
 
 export default authSlice.reducer
 
