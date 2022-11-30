@@ -21,7 +21,6 @@ export const LoginPage = () => {
 
                 <Grid item>
                     <Paper elevation={3} sx={{width: "100%", maxWidth: "500px"}}>
-
                         <Grid container direction={"column"} justifyContent={"center"} alignItems={"center"}>
                             <Grid item>
                                 <h1>
@@ -38,7 +37,6 @@ export const LoginPage = () => {
                             </Grid>
                         </Grid>
                     </Paper>
-
                 </Grid>
 
             </Grid>
