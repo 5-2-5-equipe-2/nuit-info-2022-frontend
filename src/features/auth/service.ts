@@ -63,7 +63,6 @@ export const signUp = (payload: CreateUserInput) => {
 }
 
 
-
 export const Service = {
     login,
     register: signUp,

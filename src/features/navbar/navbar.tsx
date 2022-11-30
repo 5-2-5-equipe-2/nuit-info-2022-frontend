@@ -31,7 +31,7 @@ function ResponsiveAppBar() {
                 </Toolbar>
             </AppBar>
         </Box>
-);
+    );
 }
 
 export default ResponsiveAppBar;
