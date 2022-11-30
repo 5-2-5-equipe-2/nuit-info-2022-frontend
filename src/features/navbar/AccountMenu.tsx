@@ -4,13 +4,14 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import {Link} from "react-router-dom";
+import {useQuery} from "react-query";
+import {getUserById} from "../auth/service";
+import {useAppSelector} from "../../hooks";
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -21,6 +22,14 @@ export default function AccountMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const auth = useAppSelector(state => state.auth);
+
+    const {data} = useQuery(['user', auth.id], () => getUserById(auth.id), {
+        enabled: !!auth.id,
+        refetchOnWindowFocus: false,
+        retry: false,
+    });
     return (
         <React.Fragment>
             <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
@@ -33,7 +42,10 @@ export default function AccountMenu() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+                        <Avatar sx={{
+                            width: 32,
+                            height: 32
+                        }}>{data?.data.getUserById.firstName[0] + data?.data.getUserById.lastName[0]}</Avatar>
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -72,26 +84,28 @@ export default function AccountMenu() {
                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
-                <MenuItem>
-                    <Avatar/> Profile
-                </MenuItem>
-                <MenuItem>
-                    <Avatar/> My account
-                </MenuItem>
-                <Divider/>
-                <MenuItem>
-                    <ListItemIcon>
-                        <PersonAdd fontSize="small"/>
-                    </ListItemIcon>
-                    Add another account
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <Settings fontSize="small"/>
-                    </ListItemIcon>
-                    Settings
-                </MenuItem>
-                <Link to="/logout" style={{textDecoration: "none"}}>
+                {/*<MenuItem>*/}
+                {/*    <Avatar/> Profile*/}
+                {/*</MenuItem>*/}
+                {/*<MenuItem>*/}
+                {/*    <Avatar/> My account*/}
+                {/*</MenuItem>*/}
+                {/*<Divider/>*/}
+                {/*<MenuItem>*/}
+                {/*    <ListItemIcon>*/}
+                {/*        <PersonAdd fontSize="small"/>*/}
+                {/*    </ListItemIcon>*/}
+                {/*    Add another account*/}
+                {/*</MenuItem>*/}
+                <Link to="/update" style={{textDecoration: 'none', color: 'white'}}>
+                    <MenuItem>
+                        <ListItemIcon>
+                            <Settings fontSize="small"/>
+                        </ListItemIcon>
+                        Settings
+                    </MenuItem>
+                </Link>
+                <Link to="/logout" style={{textDecoration: "none", color: "white"}}>
                     <MenuItem>
                         <ListItemIcon>
                             <Logout fontSize="small"/>
