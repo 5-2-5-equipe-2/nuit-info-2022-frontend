@@ -1,13 +1,13 @@
 import * as React from "react";
 import {useForm} from "react-hook-form";
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, Grid, TextField, Typography} from "@mui/material";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import {loginAction} from "../actions";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {Form} from "react-router-dom";
-import {AuthStatus} from "../authSlice";
+import {Form, Link} from "react-router-dom";
 import {useSnackbar} from "notistack";
+import {isAuthenticated} from "../utils";
 
 const validationSchema = Yup.object().shape({
 
@@ -31,7 +31,7 @@ export default function LoginForm() {
     const auth = useAppSelector(state => state.auth);
     const {enqueueSnackbar} = useSnackbar();
     const onSubmit = (data: any) => {
-        if (auth.status === AuthStatus.LOGGED_OUT || auth.status === AuthStatus.ERROR || auth.status === AuthStatus.IDLE) {
+        if (!isAuthenticated(auth)) {
             dispatch(loginAction({username: data.username, password: data.password}))
         } else {
             enqueueSnackbar("You are already logged in!", {
@@ -94,6 +94,9 @@ export default function LoginForm() {
 
                 </Form>
 
+            </Grid>
+            <Grid item>
+                <Typography variant={"body2"}>Don't have an account? <Link to={'/signup'}>Sign up</Link></Typography>
             </Grid>
             <Grid item>
                 <Button
