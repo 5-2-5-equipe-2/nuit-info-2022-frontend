@@ -10,7 +10,8 @@ import {ISourceOptions, Main} from "tsparticles";
 import {loadTrianglesPreset} from "tsparticles-preset-triangles";
 import {Logout} from "./pages/Logout";
 import UpdateUser from "./pages/Update";
-
+import {BrowserView} from 'react-device-detect';
+import Game from "./pages/Game";
 
 function App() {
     const options: ISourceOptions = {
@@ -59,7 +60,8 @@ function App() {
     const initialize = async (instance: Main) => {
         await loadTrianglesPreset(instance);
     };
-    return <><Particles options={options} init={initialize}/>
+    return <>
+        <BrowserView><Particles options={options} init={initialize}/></BrowserView>
         <Grid container direction={"column"} alignItems={"stretch"} justifyContent={"stretch"}
               sx={{minHeight: "100vh"}}>
 
@@ -72,6 +74,7 @@ function App() {
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/logout" element={<Logout/>}/>
                     <Route path="/update" element={<UpdateUser/>}/>
+                    <Route path="/game" element={<Game/>}/>
                 </Routes></Grid>
         </Grid>
     </>;
