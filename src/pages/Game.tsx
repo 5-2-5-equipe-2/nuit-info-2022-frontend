@@ -8,6 +8,7 @@ export const Game = () => {
     const {isLoaded} = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyD8grHFQALJcd-iB00Sv6MLw-Kdc5ILgnU",
+        libraries: ['places', 'geometry'],
     })
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
@@ -47,10 +48,25 @@ export const Game = () => {
                 width: "100vw",
 
             }}
-            zoom={8}
             center={userLocation}
             onLoad={onLoad}
             onUnmount={onUnmount}
+            options={{
+                disableDefaultUI: true,
+                zoomControl: true,
+                // remove default icons
+                styles: [
+                    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [
+                            {
+                                visibility: "off",
+                            },
+                        ],
+                    },
+                ],
+            }}
         >
             {userMarker}
         </GoogleMap>
