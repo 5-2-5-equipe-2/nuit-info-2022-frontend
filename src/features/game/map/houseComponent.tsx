@@ -14,6 +14,10 @@ export const HouseComponent = (props: HouseComponentProps) => {
         "https://cdn.discordapp.com/attachments/1043586310159466536/1047944525152256000/maison1.png",
         "https://cdn.discordapp.com/attachments/1043586310159466536/1047948612258246676/maison1b.png",
         "https://cdn.discordapp.com/attachments/1043586310159466536/1047968750009335908/immeuble.png",
+        "https://cdn.discordapp.com/attachments/1043586310159466536/1048096978204119080/maisonLarge.png",
+        "https://cdn.discordapp.com/attachments/1043586310159466536/1048107262117421096/maisonPetiteNoir.png",
+        "https://cdn.discordapp.com/attachments/1043586310159466536/1048103855516286997/maisonPetiteNoir.png",
+        // "https://cdn.discordapp.com/attachments/1043586310159466536/1048107216902836254/libraire.png",
         // "https://cdn.discordapp.com/attachments/1043586310159466536/1047968816409354263/pharmacie.png",
     ]
     // convert a random string id to a number

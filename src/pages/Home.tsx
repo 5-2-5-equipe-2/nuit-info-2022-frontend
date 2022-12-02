@@ -28,21 +28,17 @@ export const Home = () => {
                                 <h1>
                                     <Typewriter
                                         onInit={(typewriter) => {
-                                            typewriter.typeString('Home')
+                                            typewriter.typeString('Acceuil')
                                                 .start()
                                         }}
                                     />
                                 </h1>
 
-                                <Typography variant={"h4"}>Welcome to the home page!</Typography>
+                                <Typography variant={"h4"}>Bienvenue!</Typography>
                                 <Typography variant={"h6"}>Cette application a été développée avec React et Redux.</Typography>
-                                <Typography variant={"h6"}></Typography>
-                                <Typography variant={"h6"}>It also allows you to login and logout.</Typography>
-                                <Typography variant={"h6"}>It uses Firebase for authentication and database.</Typography>
-                                <Typography variant={"h6"}>It uses React and Redux for state management.</Typography>
-                                <Typography variant={"h6"}>It uses Material UI for styling.</Typography>
-                                <Typography variant={"h6"}>It uses React Spring for animations.</Typography>
-                                <Typography variant={"h6"}>It uses React Router for routing.</Typography>
+                                <Typography variant={"h6"}>Vous pouvez jouer avec le bouton jeu ou le `/play`.</Typography>
+                                <Typography variant={"h6"}>Pour vous documenter, allez sur <a href="https://www.sida-info-service.org/">Sida Info Service</a> ou sur <a href="https://www.sexualites-info-sante.fr/">Sexualités Infos Santé</a>.</Typography>
+
                             </Grid>
                         </Grid>
                     </Paper>
