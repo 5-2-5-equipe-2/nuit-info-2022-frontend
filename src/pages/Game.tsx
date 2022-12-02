@@ -23,7 +23,7 @@ export const Game = () => {
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
             positionOptions: {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
             },
             userDecisionTimeout: 5000,
         });

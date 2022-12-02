@@ -47,7 +47,7 @@ export const getMapData = async (map: google.maps.Map, lat: number, lng: number)
 export const drawHouses = async (map: google.maps.Map, lat: number, lng: number) => {
     // draw houses on map
     let places = await getMapData(map, lat, lng);
-    let gridSize = 1;
+    let gridSize = 2;
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
             places = places.concat(await getMapData(map, lat + (i - gridSize / 2) * 0.005, lng + (j - gridSize / 2) * 0.005).catch(e => console.log(e)));
