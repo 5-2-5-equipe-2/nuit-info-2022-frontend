@@ -31,7 +31,8 @@ export const getMapData = async (map: google.maps.Map, lat: number, lng: number)
 
     // get data with async await
     return await new Promise((resolve, reject) => {
-            service.nearbySearch(request, (results, status) => {
+            // @ts-ignore
+        service.nearbySearch(request, (results, status) => {
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
                     console.log(results);
                     console.log(status);
@@ -50,6 +51,7 @@ export const drawHouses = async (map: google.maps.Map, lat: number, lng: number)
     let gridSize = 2;
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
+            // @ts-ignore
             places = places.concat(await getMapData(map, lat + (i - gridSize / 2) * 0.005, lng + (j - gridSize / 2) * 0.005).catch(e => console.log(e)));
             console.log(places);
             // wait 2 seconds to prevent google api limit
@@ -61,17 +63,21 @@ export const drawHouses = async (map: google.maps.Map, lat: number, lng: number)
     let renderedHouses = [];
     let jsxHouses = [];
 
+    // @ts-ignore
     for (let i = 0; i < places.length; i++) {
         // check if place is not close to the other places
         let render = true;
         for (let j = 0; j < renderedHouses.length; j++) {
+            // @ts-ignore
             if (google.maps.geometry.spherical.computeDistanceBetween(places[i].geometry.location, renderedHouses[j].geometry.location) < 100) {
                 render = false;
                 break;
             }
         }
         if (render) {
+            // @ts-ignore
             renderedHouses.push(places[i]);
+            // @ts-ignore
             let place = places[i];
             let marker = <HouseComponent house={place}/>;
             jsxHouses.push(marker);

@@ -21,6 +21,7 @@ export const HouseComponent = (props: HouseComponentProps) => {
         // "https://cdn.discordapp.com/attachments/1043586310159466536/1047968816409354263/pharmacie.png",
     ]
     // convert a random string id to a number
+    // @ts-ignore
     let id = props.house.place_id.split("").reduce((a, b) => {
             a = ((a << 5) - a) + b.charCodeAt(0);
             return a & a
@@ -29,22 +30,31 @@ export const HouseComponent = (props: HouseComponentProps) => {
 
 
     let url = houses[Math.abs(id) % houses.length];
+    // @ts-ignore
     if (props.house.types.includes("hospital")|| props.house.types.includes("pharmacy") || props.house.types.includes("doctor") || props.house.types.includes("dentist")) {
         url = "https://cdn.discordapp.com/attachments/1043586310159466536/1047968816409354263/pharmacie.png";
     }
     const image = {
         url: url,
     }
-
+    // @ts-ignore
+    const lat: number = props?.house?.geometry?.location?.lat();
+    // @ts-ignore
+    const lng: number = props?.house?.geometry?.location?.lng();
+    // @ts-ignore
     return <Marker
-        position={{lat: props.house.geometry.location.lat(), lng: props.house.geometry.location.lng()}}
+        position={{
+
+            lat: props?.house?.geometry?.location?.lat(),
+            lng: props?.house?.geometry?.location?.lng()}
+    }
         onClick={() => setShowInfo(true)}
         icon={image}
 
     >
         {showInfo && <InfoWindow
             options={{pixelOffset: new google.maps.Size(0, -30)}}
-            position={{lat: props.house.geometry.location.lat(), lng: props.house.geometry.location.lng()}}
+            position={{lat: lat, lng: lng}}
             onCloseClick={() => setShowInfo(false)}
         >
             <QuestionComponent/>

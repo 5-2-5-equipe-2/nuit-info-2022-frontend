@@ -29,8 +29,10 @@ export const  OnboardingButton = () => {
   const [isDisabled, setDisabled] = React.useState(false);
   const [accounts, setAccounts] = React.useState([]);
   const onboarding = React.useRef();
+  // @ts-ignore
   const web3 = new Web3(window.ethereum);
   const jsonABI=[{"inputs":[{"internalType":"address","name":"_who","type":"address"},{"internalType":"string","name":"_codeName","type":"string"}],"name":"addMember","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint32","name":"_key","type":"uint32"},{"internalType":"string","name":"_teamName","type":"string"}],"name":"claimKey","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint32","name":"_key","type":"uint32"},{"internalType":"int8","name":"_value","type":"int8"}],"name":"createKey","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_msg","type":"string"}],"name":"sendMessage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_codeName","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"members","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"messageCount","outputs":[{"internalType":"uint16","name":"","type":"uint16"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"messages","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"string","name":"message","type":"string"}],"stateMutability":"view","type":"function"}];
+  // @ts-ignore
   const secretContract = new web3.eth.Contract(jsonABI,"0x3210ecB7A8Ea2E6595BE559f215a1Ff98828DfF7");
 
   const web3Query = async() => {
@@ -65,6 +67,7 @@ export const  OnboardingButton = () => {
     
     // txHash is a hex string
     // As with any RPC call, it may throw an error
+    // @ts-ignore
     const txHash = await window.ethereum.request({
       method: 'eth_sendTransaction',
       params: [transactionParameters],
@@ -72,6 +75,7 @@ export const  OnboardingButton = () => {
     console.log(txHash);
   };
 
+  // @ts-ignore
   const sendKey = async (key) => {
     const transactionParameters = {
       nonce: '0x00', // ignored by MetaMask
@@ -86,6 +90,7 @@ export const  OnboardingButton = () => {
     
     // txHash is a hex string
     // As with any RPC call, it may throw an error
+    // @ts-ignore
     const txHash = await window.ethereum.request({
       method: 'eth_sendTransaction',
       params: [transactionParameters],
@@ -98,6 +103,7 @@ export const  OnboardingButton = () => {
 
   React.useEffect(() => {
     if (!onboarding.current) {
+      // @ts-ignore
       onboarding.current = new MetaMaskOnboarding();
     }
   }, []);
@@ -107,6 +113,7 @@ export const  OnboardingButton = () => {
       if (accounts.length > 0) {
         setButtonText(CONNECTED_TEXT);
         setDisabled(true);
+        // @ts-ignore
         onboarding.current.stopOnboarding();
       } else {
         setButtonText(CONNECT_TEXT);
@@ -116,15 +123,19 @@ export const  OnboardingButton = () => {
   }, [accounts]);
 
   React.useEffect(() => {
+    // @ts-ignore
     function handleNewAccounts(newAccounts) {
       setAccounts(newAccounts);
     }
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      // @ts-ignore
       window.ethereum
         .request({ method: 'eth_requestAccounts' })
         .then(handleNewAccounts);
+      // @ts-ignore
       window.ethereum.on('accountsChanged', handleNewAccounts);
       return () => {
+        // @ts-ignore
         window.ethereum.removeListener('accountsChanged', handleNewAccounts);
       };
     }
@@ -132,10 +143,12 @@ export const  OnboardingButton = () => {
 
   const onClick = () => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      // @ts-ignore
       window.ethereum
         .request({ method: 'eth_requestAccounts' })
-        .then((newAccounts) => setAccounts(newAccounts));
+        .then((newAccounts:any) => setAccounts(newAccounts));
     } else {
+      // @ts-ignore
       onboarding.current.startOnboarding();
     }
   };
@@ -149,7 +162,7 @@ export const  OnboardingButton = () => {
     }
 });
 
-const handleText = (e) => {
+const handleText = (e:any) => {
     setKeyBlock(e.target.value);
 };
 
