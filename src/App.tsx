@@ -10,7 +10,12 @@ import {ISourceOptions, Main} from "tsparticles";
 import {loadTrianglesPreset} from "tsparticles-preset-triangles";
 import {Logout} from "./pages/Logout";
 import UpdateUser from "./pages/Update";
+import {OnboardingButton} from "./pages/Blockchain";
 
+import {BrowserView} from 'react-device-detect';
+import Game from "./pages/Game";
+import {StartGame} from "./pages/StartGame";
+import {Home} from "./pages/Home";
 
 function App() {
     const options: ISourceOptions = {
@@ -59,19 +64,28 @@ function App() {
     const initialize = async (instance: Main) => {
         await loadTrianglesPreset(instance);
     };
-    return <><Particles options={options} init={initialize}/>
+    return <>
+        <BrowserView><Particles options={options} init={initialize}/></BrowserView>
         <Grid container direction={"column"} alignItems={"stretch"} justifyContent={"stretch"}
               sx={{minHeight: "100vh"}}>
 
             <Grid item sx={{flexGrow: 1}}>
                 <ResponsiveAppBar/>
             </Grid>
-            <Grid item sx={{flexGrow: 1}}>
+            <Grid item sx={{
+                flexGrow: 1,
+
+
+            }}>
                 <Routes>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/logout" element={<Logout/>}/>
                     <Route path="/update" element={<UpdateUser/>}/>
+                    <Route path="/ts" element={<OnboardingButton/>}/>
+                    <Route path="/game" element={<Game/>}/>
+                    <Route path="/start" element={<StartGame/>}/>
+                    <Route path="/home" element={<Home/>}/>
                 </Routes></Grid>
         </Grid>
     </>;
