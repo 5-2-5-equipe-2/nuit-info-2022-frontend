@@ -14,8 +14,8 @@ export const ProgressBar = () => {
             refetchInterval: 1000,
             enabled: auth.id !== undefined,
             onSuccess: (data) => {
-                setProgress(data?.data.getGameByUserId.health)
                 console.log(data?.data.getGameByUserId.health)
+                setProgress(data?.data.getGameByUserId.health)
             }
         }
     )

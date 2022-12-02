@@ -13,6 +13,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddGameResult = {
+  __typename?: 'AddGameResult';
+  success: Scalars['Boolean'];
+};
+
 export type AddQuestionInput = {
   a1: Scalars['String'];
   a2: Scalars['String'];
@@ -77,6 +82,10 @@ export type Game = {
   userId: Scalars['Int'];
 };
 
+export type GameInput = {
+  token: Scalars['String'];
+};
+
 export type LoginInput = {
   password: Scalars['String'];
   username: Scalars['String'];
@@ -92,6 +101,7 @@ export type Mutation = {
   deleteNote: DeleteNoteResult;
   deleteScope: DeleteScopeResult;
   deleteUser: DeleteUserResult;
+  endGame: AddGameResult;
   loginUser: ValidLoginResult;
   refreshUser: ValidLoginResult;
   startGame: Game;
@@ -138,6 +148,11 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationEndGameArgs = {
+  input: GameInput;
+};
+
+
 export type MutationLoginUserArgs = {
   input: LoginInput;
 };
@@ -162,8 +177,8 @@ export type Note = {
 export type Query = {
   __typename?: 'Query';
   getGameByUserId?: Maybe<Game>;
-  getNoteById?: Maybe<Note>;
-  getNotes: Array<Note>;
+  getNoteById?: Maybe<Scalars['String']>;
+  getNotes: Scalars['String'];
   getQuestionById?: Maybe<Questions>;
   getRandomQuestion?: Maybe<Questions>;
   getUserById?: Maybe<User>;

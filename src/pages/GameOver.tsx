@@ -5,6 +5,7 @@ import Typewriter from "typewriter-effect";
 import {isAuthenticated} from "../features/auth/utils";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
+import {endGame} from "../features/game/map/service";
 
 
 export const GameOver = () => {
@@ -18,10 +19,12 @@ export const GameOver = () => {
         }
     });
 
+    endGame({token: useSelector((state: RootState) => state.auth.access)}).then((res) => {
+        console.log(res)
+    })
     if (!isAuthenticated(useSelector((state: RootState) => state.auth))) {
         return <Navigate to="/login"/>
     }
-
     return (
         <animated.div style={styles}>
 

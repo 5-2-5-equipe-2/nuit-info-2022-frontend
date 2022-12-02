@@ -67,28 +67,31 @@ function App() {
     };
     return <>
         <BrowserView><Particles options={options} init={initialize}/></BrowserView>
+        <Grid container direction={"column"} alignItems={"stretch"} justifyContent={"stretch"}
+              sx={{minHeight: "100vh"}}>
 
-        <Grid item sx={{flexGrow: 1}}>
-            <ResponsiveAppBar/>
+            <Grid item sx={{flexGrow: 1}}>
+                <ResponsiveAppBar/>
+            </Grid>
+            <Grid item sx={{
+                flexGrow: 1,
+
+
+            }}>
+                <Routes>
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/logout" element={<Logout/>}/>
+                    <Route path="/update" element={<UpdateUser/>}/>
+                    <Route path="/ts" element={<OnboardingButton/>}/>
+                    <Route path="/game" element={<Game/>}/>
+                    <Route path="/start" element={<StartGame/>}/>
+                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="*" element={<div>404</div>}/>
+                    <Route path="/gameover" element={<GameOver/>}/>
+                </Routes></Grid>
         </Grid>
-        <Grid item sx={{
-            flexGrow: 1,
-
-
-        }}>
-            <Routes>
-                <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/signup" element={<SignUp/>}/>
-                <Route path="/logout" element={<Logout/>}/>
-                <Route path="/update" element={<UpdateUser/>}/>
-                <Route path="/ts" element={<OnboardingButton/>}/>
-                <Route path="/game" element={<Game/>}/>
-                <Route path="/start" element={<StartGame/>}/>
-                <Route path="/home" element={<Home/>}/>
-                <Route path="/" element={<Home/>}/>
-                <Route path="*" element={<div>404</div>}/>
-                <Route path="/gameover" element={<GameOver/>}/>
-            </Routes></Grid>
     </>;
 }
 

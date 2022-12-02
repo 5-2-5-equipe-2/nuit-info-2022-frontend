@@ -1,4 +1,4 @@
-import {AddQuestionInput, AnswerQuestionInput, gql, StartGameInput} from "../../../generated/graphql";
+import {AddQuestionInput, AnswerQuestionInput, GameInput, gql, StartGameInput} from "../../../generated/graphql";
 import {publicClient} from "../../../utils/graphqlAPI";
 
 const ANSWER_QUESTION_MUTATION = gql`
@@ -87,15 +87,22 @@ const GET_RANDOM_QUESTION_QUERY = gql`
 
 export const getRandomQuestion = () => {
     return publicClient.query({
-        query: GET_RANDOM_QUESTION_QUERY
+        query: GET_RANDOM_QUESTION_QUERY,
+        fetchPolicy: 'no-cache',
     })
 }
 
-const RESTART_GAME_MUTATION = gql`
-    mutation($id: ID!){
-        restartGame(id: $id){
-            id,
-            health
-        }   
+const END_GAME_MUTATION = gql`
+    mutation($node : GameInput!){
+        endGame(input: $node){
+            success
+        }
     }
 `
+
+export const endGame = (id: GameInput) => {
+    return publicClient.mutate({
+        mutation: END_GAME_MUTATION,
+        variables: {node: id}
+    })
+}

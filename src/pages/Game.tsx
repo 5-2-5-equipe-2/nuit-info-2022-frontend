@@ -50,13 +50,15 @@ export const Game = () => {
     }/>
     // jsxHouses is an array of houses that are rendered on the map as a state
     const [jsxHouses, setJsxHouses] = useState([] as JSX.Element[]);
+    startGame({
+        token: auth.access,
+    }).then((response) => {
+        console.log(response);
+    }).catch((error) => {
 
+    })
     useEffect(() => {
-        startGame({
-            token: auth.access,
-        }).then((response) => {
-            console.log(response);
-        })
+
         console.log(coords);
         if (map && isLoaded && coords && isGeolocationAvailable && isGeolocationEnabled) {
             drawHouses(map, coords.latitude, coords.longitude).then((houses) => {

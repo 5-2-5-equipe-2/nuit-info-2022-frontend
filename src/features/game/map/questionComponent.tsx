@@ -18,7 +18,8 @@ export const QuestionComponent = () => {
         <Grid container spacing={2} justifyContent="center" alignItems="center">
             <Grid item xs={12}>
                 <Typography variant="h4" component="h4" gutterBottom color={"primary"}>
-                    {data?.data.getRandomQuestion.question}
+                    {data?.data.getRandomQuestion.question.replaceAll("{name}", "Bob")
+                        .replaceAll("\"", "'")}
                 </Typography>
             </Grid>
             {
@@ -39,7 +40,8 @@ export const QuestionComponent = () => {
                 isSuccess && data2.data.answerQuestion.success &&
                 <>
                     <Grid item xs={12}>
-                        <Typography color={"green"} align="center">{data?.data.getRandomQuestion.explanation}</Typography>
+                        <Typography color={"green"}
+                                    align="center">{data?.data.getRandomQuestion.explanation}</Typography>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography color={"green"} align="center">Nice one</Typography>
@@ -55,7 +57,9 @@ export const QuestionComponent = () => {
                                     questionId: data?.data.getRandomQuestion.id,
                                     answer: data?.data.getRandomQuestion.a1,
                                     token: auth.access
-                                })}>
+                                })}
+                                disabled={isSuccess}
+                        >
                             {data?.data.getRandomQuestion.a1}</Button>
                     </Grid>
                     <Grid item xs={6}>
@@ -64,7 +68,9 @@ export const QuestionComponent = () => {
                                     questionId: data?.data.getRandomQuestion.id,
                                     answer: data?.data.getRandomQuestion.a2,
                                     token: auth.access
-                                })}>
+                                })}
+                                disabled={isSuccess}
+                        >
                             {data?.data.getRandomQuestion.a2}</Button>
                     </Grid>
                 </Grid>
