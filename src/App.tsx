@@ -16,6 +16,7 @@ import {BrowserView} from 'react-device-detect';
 import Game from "./pages/Game";
 import {StartGame} from "./pages/StartGame";
 import {Home} from "./pages/Home";
+import {GameOver} from "./pages/GameOver";
 
 function App() {
     const options: ISourceOptions = {
@@ -86,6 +87,9 @@ function App() {
                     <Route path="/game" element={<Game/>}/>
                     <Route path="/start" element={<StartGame/>}/>
                     <Route path="/home" element={<Home/>}/>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="*" element={<div>404</div>}/>
+                    <Route path="/gameover" element={<GameOver/>}/>
                 </Routes></Grid>
         </Grid>
     </>;

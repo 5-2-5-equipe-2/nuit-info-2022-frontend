@@ -32,6 +32,7 @@ function ResponsiveAppBar() {
                     <Divider orientation="vertical" sx={{height: "2rem", margin: "0 1rem"}}/>
                     <Button color="inherit" component={Link} to="/">Home</Button>
                     <Button color="inherit" component={Link} to="/start">Game</Button>
+                    <Button color="inherit" component={Link} to="/ts">Blockchain</Button>
                     <Divider orientation="vertical" sx={{height: "2rem", margin: "0 1rem"}}/>
                     {isAuthenticated(auth) ?
                         <AccountMenu/> :

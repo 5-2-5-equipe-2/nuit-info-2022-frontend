@@ -4,11 +4,13 @@ import {useGeolocated} from "react-geolocated";
 import mapGeneration from "../features/game/map/mapGeneration";
 import {drawHouses} from "../features/game/map/dataCollection";
 import {ProgressBar} from "../features/game/map/ProgressBar";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, LinearProgress} from "@mui/material";
 import {isAuthenticated} from "../features/auth/utils";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
 import {Navigate} from "react-router-dom";
+import {startGame} from "../features/game/map/service";
+import {useAppSelector} from "../hooks";
 
 
 export const Game = () => {
@@ -17,6 +19,7 @@ export const Game = () => {
         googleMapsApiKey: "AIzaSyD8grHFQALJcd-iB00Sv6MLw-Kdc5ILgnU",
         libraries: ['places', 'geometry'],
     })
+    const auth = useAppSelector(state => state.auth)
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
             positionOptions: {
@@ -31,8 +34,6 @@ export const Game = () => {
     const onLoad = React.useCallback(function callback(map: google.maps.Map) {
             mapGeneration(map);
             setMap(map)
-
-
         }
         , [])
 
@@ -49,8 +50,15 @@ export const Game = () => {
     }/>
     // jsxHouses is an array of houses that are rendered on the map as a state
     const [jsxHouses, setJsxHouses] = useState([] as JSX.Element[]);
+    startGame({
+        token: auth.access,
+    }).then((response) => {
+        console.log(response);
+    }).catch((error) => {
 
+    })
     useEffect(() => {
+
         console.log(coords);
         if (map && isLoaded && coords && isGeolocationAvailable && isGeolocationEnabled) {
             drawHouses(map, coords.latitude, coords.longitude).then((houses) => {
@@ -73,7 +81,13 @@ export const Game = () => {
     }
     return isLoaded && isGeolocationAvailable ? (
         <>
-            <ProgressBar/>
+            {
+                (jsxHouses.length === 0) ? <LinearProgress
+                    sx={{
+                        height: "5vh",
+                    }}
+                /> : <ProgressBar/>
+            }
             <GoogleMap
                 mapContainerStyle={{
                     height: "90vh",

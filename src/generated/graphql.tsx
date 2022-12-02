@@ -13,6 +13,36 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddGameResult = {
+  __typename?: 'AddGameResult';
+  success: Scalars['Boolean'];
+};
+
+export type AddQuestionInput = {
+  a1: Scalars['String'];
+  a2: Scalars['String'];
+  answer: Scalars['String'];
+  category: Scalars['String'];
+  explanation: Scalars['String'];
+  question: Scalars['String'];
+};
+
+export type AnswerQuestionInput = {
+  answer: Scalars['String'];
+  questionId: Scalars['Int'];
+  token: Scalars['String'];
+};
+
+export type AnswerQuestionResult = {
+  __typename?: 'AnswerQuestionResult';
+  success: Scalars['Boolean'];
+};
+
+export type CreateNoteInput = {
+  text: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type CreateScopeInput = {
   description: Scalars['String'];
   title: Scalars['String'];
@@ -27,6 +57,12 @@ export type CreateUserInput = {
   username: Scalars['String'];
 };
 
+export type DeleteNoteResult = {
+  __typename?: 'DeleteNoteResult';
+  rowsAffected: Scalars['Int'];
+  success: Scalars['Boolean'];
+};
+
 export type DeleteScopeResult = {
   __typename?: 'DeleteScopeResult';
   rowsAffected: Scalars['Int'];
@@ -39,6 +75,17 @@ export type DeleteUserResult = {
   success: Scalars['Boolean'];
 };
 
+export type Game = {
+  __typename?: 'Game';
+  health: Scalars['Int'];
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
+export type GameInput = {
+  token: Scalars['String'];
+};
+
 export type LoginInput = {
   password: Scalars['String'];
   username: Scalars['String'];
@@ -46,12 +93,33 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addQuestion: Questions;
+  answerQuestion: AnswerQuestionResult;
+  createNote: Note;
   createScope: Scope;
   createUser: User;
+  deleteNote: DeleteNoteResult;
   deleteScope: DeleteScopeResult;
   deleteUser: DeleteUserResult;
+  endGame: AddGameResult;
   loginUser: ValidLoginResult;
   refreshUser: ValidLoginResult;
+  startGame: Game;
+};
+
+
+export type MutationAddQuestionArgs = {
+  input: AddQuestionInput;
+};
+
+
+export type MutationAnswerQuestionArgs = {
+  input: AnswerQuestionInput;
+};
+
+
+export type MutationCreateNoteArgs = {
+  input: CreateNoteInput;
 };
 
 
@@ -65,6 +133,11 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationDeleteNoteArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationDeleteScopeArgs = {
   id: Scalars['Int'];
 };
@@ -72,6 +145,11 @@ export type MutationDeleteScopeArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationEndGameArgs = {
+  input: GameInput;
 };
 
 
@@ -84,15 +162,58 @@ export type MutationRefreshUserArgs = {
   input: RefreshInput;
 };
 
+
+export type MutationStartGameArgs = {
+  input: StartGameInput;
+};
+
+export type Note = {
+  __typename?: 'Note';
+  id: Scalars['Int'];
+  text: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  getGameByUserId?: Maybe<Game>;
+  getNoteById?: Maybe<Scalars['String']>;
+  getNotes: Scalars['String'];
+  getQuestionById?: Maybe<Questions>;
+  getRandomQuestion?: Maybe<Questions>;
   getUserById?: Maybe<User>;
   getUsers: Array<User>;
 };
 
 
+export type QueryGetGameByUserIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryGetNoteByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryGetQuestionByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryGetUserByIdArgs = {
   id: Scalars['Int'];
+};
+
+export type Questions = {
+  __typename?: 'Questions';
+  a1: Scalars['String'];
+  a2: Scalars['String'];
+  answer: Scalars['String'];
+  category: Scalars['String'];
+  explanation: Scalars['String'];
+  id: Scalars['Int'];
+  question: Scalars['String'];
 };
 
 export type RefreshInput = {
@@ -104,6 +225,10 @@ export type Scope = {
   description: Scalars['String'];
   id: Scalars['Int'];
   title: Scalars['String'];
+};
+
+export type StartGameInput = {
+  token: Scalars['String'];
 };
 
 export type User = {
