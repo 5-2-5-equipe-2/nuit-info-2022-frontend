@@ -10,6 +10,7 @@ import {ISourceOptions, Main} from "tsparticles";
 import {loadTrianglesPreset} from "tsparticles-preset-triangles";
 import {Logout} from "./pages/Logout";
 import UpdateUser from "./pages/Update";
+import {OnboardingButton} from "./pages/Blockchain";
 
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/logout" element={<Logout/>}/>
                     <Route path="/update" element={<UpdateUser/>}/>
+                    <Route path="/ts" element={<OnboardingButton/>}/>
                 </Routes></Grid>
         </Grid>
     </>;
