@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./AccountMenu";
 import {useAppSelector} from "../../hooks";
 import {isAuthenticated} from "../auth/utils";
-import {Button} from "@mui/material";
+import {Button, Divider} from "@mui/material";
 import {Link} from "react-router-dom";
 
 function ResponsiveAppBar() {
@@ -16,20 +16,23 @@ function ResponsiveAppBar() {
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar position="static"
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
+
+                }}
+            >
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{mr: 2}}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                    <Typography variant="h6" component="div">
                         5+2=5
                     </Typography>
+                    <Divider orientation="vertical" sx={{height: "2rem", margin: "0 1rem"}}/>
+                    <Button color="inherit" component={Link} to="/">Home</Button>
+                    <Button color="inherit" component={Link} to="/start">Game</Button>
+                    <Divider orientation="vertical" sx={{height: "2rem", margin: "0 1rem"}}/>
                     {isAuthenticated(auth) ?
                         <AccountMenu/> :
                         <Link to="/login">

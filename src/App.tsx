@@ -12,6 +12,7 @@ import {Logout} from "./pages/Logout";
 import UpdateUser from "./pages/Update";
 import {BrowserView} from 'react-device-detect';
 import Game from "./pages/Game";
+import {StartGame} from "./pages/StartGame";
 
 function App() {
     const options: ISourceOptions = {
@@ -68,13 +69,18 @@ function App() {
             <Grid item sx={{flexGrow: 1}}>
                 <ResponsiveAppBar/>
             </Grid>
-            <Grid item sx={{flexGrow: 1}}>
+            <Grid item sx={{
+                flexGrow: 1,
+
+
+            }}>
                 <Routes>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/logout" element={<Logout/>}/>
                     <Route path="/update" element={<UpdateUser/>}/>
                     <Route path="/game" element={<Game/>}/>
+                    <Route path="/start" element={<StartGame/>}/>
                 </Routes></Grid>
         </Grid>
     </>;
