@@ -35,8 +35,8 @@ export const Home = () => {
                                 </h1>
 
                                 <Typography variant={"h4"}>Welcome to the home page!</Typography>
-                                <Typography variant={"h6"}>This is a simple app that uses React, Redux.</Typography>
-                                <Typography variant={"h6"}>It is a simple CRUD app that allows you to create, read, update, and delete users.</Typography>
+                                <Typography variant={"h6"}>Cette application a été développée avec React et Redux.</Typography>
+                                <Typography variant={"h6"}></Typography>
                                 <Typography variant={"h6"}>It also allows you to login and logout.</Typography>
                                 <Typography variant={"h6"}>It uses Firebase for authentication and database.</Typography>
                                 <Typography variant={"h6"}>It uses React and Redux for state management.</Typography>
