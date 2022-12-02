@@ -4,7 +4,7 @@ import {useGeolocated} from "react-geolocated";
 import mapGeneration from "../features/game/map/mapGeneration";
 import {drawHouses} from "../features/game/map/dataCollection";
 import {ProgressBar} from "../features/game/map/ProgressBar";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, LinearProgress} from "@mui/material";
 import {isAuthenticated} from "../features/auth/utils";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
@@ -81,7 +81,13 @@ export const Game = () => {
     }
     return isLoaded && isGeolocationAvailable ? (
         <>
-            <ProgressBar/>
+            {
+                (jsxHouses.length === 0) ? <LinearProgress
+                    sx={{
+                        height: "5vh",
+                    }}
+                /> : <ProgressBar/>
+            }
             <GoogleMap
                 mapContainerStyle={{
                     height: "90vh",
