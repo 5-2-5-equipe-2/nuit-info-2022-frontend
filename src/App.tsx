@@ -15,6 +15,7 @@ import {OnboardingButton} from "./pages/Blockchain";
 import {BrowserView} from 'react-device-detect';
 import Game from "./pages/Game";
 import {StartGame} from "./pages/StartGame";
+import {Home} from "./pages/Home";
 
 function App() {
     const options: ISourceOptions = {
@@ -81,12 +82,10 @@ function App() {
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/logout" element={<Logout/>}/>
                     <Route path="/update" element={<UpdateUser/>}/>
-<<<<<<< HEAD
                     <Route path="/ts" element={<OnboardingButton/>}/>
-=======
                     <Route path="/game" element={<Game/>}/>
                     <Route path="/start" element={<StartGame/>}/>
->>>>>>> b432a134bbf1bd148ebb08d69286f3a7464fbb49
+                    <Route path="/home" element={<Home/>}/>
                 </Routes></Grid>
         </Grid>
     </>;

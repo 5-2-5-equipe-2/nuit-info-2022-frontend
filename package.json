@@ -18,11 +18,8 @@
     "@graphql-codegen/typescript-operations": "^2.5.7",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@hookform/resolvers": "^2.9.10",
-<<<<<<< HEAD
     "@metamask/onboarding": "^1.0.1",
-=======
     "@material-ui/core": "^4.12.4",
->>>>>>> b432a134bbf1bd148ebb08d69286f3a7464fbb49
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "@react-google-maps/api": "^2.17.0",
