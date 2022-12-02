@@ -9,6 +9,8 @@ import {isAuthenticated} from "../features/auth/utils";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
 import {Navigate} from "react-router-dom";
+import {startGame} from "../features/game/map/service";
+import {useAppSelector} from "../hooks";
 
 
 export const Game = () => {
@@ -17,6 +19,7 @@ export const Game = () => {
         googleMapsApiKey: "AIzaSyD8grHFQALJcd-iB00Sv6MLw-Kdc5ILgnU",
         libraries: ['places', 'geometry'],
     })
+    const auth = useAppSelector(state => state.auth)
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
             positionOptions: {
@@ -31,8 +34,6 @@ export const Game = () => {
     const onLoad = React.useCallback(function callback(map: google.maps.Map) {
             mapGeneration(map);
             setMap(map)
-
-
         }
         , [])
 
@@ -51,6 +52,11 @@ export const Game = () => {
     const [jsxHouses, setJsxHouses] = useState([] as JSX.Element[]);
 
     useEffect(() => {
+        startGame({
+            token: auth.access,
+        }).then((response) => {
+            console.log(response);
+        })
         console.log(coords);
         if (map && isLoaded && coords && isGeolocationAvailable && isGeolocationEnabled) {
             drawHouses(map, coords.latitude, coords.longitude).then((houses) => {
