@@ -1,7 +1,7 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 
 const PRIVATE_ENDPOINT = 'http://localhost:3000/api/auth/graphql';
-const PUBLIC_ENDPOINT = 'http://34.125.188.136:3000/api/graphql';
+const PUBLIC_ENDPOINT = 'https://server.bizel.fr/api/graphql';
 
 const privateClient = new ApolloClient({
     uri: PRIVATE_ENDPOINT,
